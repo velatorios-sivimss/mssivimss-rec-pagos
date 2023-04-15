@@ -50,6 +50,7 @@ public class RecPagos {
 	public DatosRequest obtenerRecPagos(DatosRequest request) {
 		String query = "SELECT PB.ID_PAGO_BITACORA as idPagoBit, \r\n "
 						+ "PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, \r\n"
+						+ "PB.NOM_CONTRATANTE as nomContratante, \r\n"
 						+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago FROM svt_pago_bitacora as PB "
 						+ "ORDER BY ID_PAGO_BITACORA ASC ";
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
@@ -61,12 +62,16 @@ public class RecPagos {
 	public DatosRequest buscarFiltrosRecPagos(DatosRequest request,RecPagos recPagos) {
 		
 		StringBuilder query = new StringBuilder("SELECT PB.ID_PAGO_BITACORA as idPagoBit, PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, "
+				+ " PB.NOM_CONTRATANTE as nomContratante, "
 				+ " PB.CVE_ESTATUS_PAGO as claveEstatusPago "
 				+ " FROM svt_pago_bitacora as PB ");
-		query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0" );
+			query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0" );
 		if (recPagos.getClaveFolio() != null) {
 			query.append(" AND PB.CVE_FOLIO = ").append(recPagos.getClaveFolio());
-		}		
+		}	
+		if (recPagos.getNomContratante() != null) {
+			query.append(" AND PB.NOM_CONTRATANTE = ").append(recPagos.getNomContratante());
+		}
 		query.append(" ORDER BY PB.ID_PAGO_BITACORA DESC ");
 		
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
