@@ -19,5 +19,5 @@ public class RecPagosDto {
 	private String claveFolio;
 	private String descValor;
 	private String clavePago;
-	
+
 }

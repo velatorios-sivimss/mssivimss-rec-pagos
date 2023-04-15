@@ -19,6 +19,7 @@ import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.Response;
 import com.imss.sivimss.recpagos.util.MensajeResponseUtil;
 import com.imss.sivimss.recpagos.beans.RecPagos;
+import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.UsuarioRequest;
 import com.imss.sivimss.recpagos.service.RecPagosService;
 
@@ -46,13 +47,13 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Override
 	public Response<?> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		Gson gson = new Gson();
-
-		String datosJson = String.valueOf(request.getDatos().get(AppConstantes.DATOS));
-		UsuarioRequest usuarioRequest = gson.fromJson(datosJson, UsuarioRequest.class);
 		
-		RecPagos recPagos = new RecPagos(usuarioRequest);
+		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
+		
+		RecPagos recPagos = new RecPagos(recPagosRequest);
 
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION);
 	}
+	
 }

@@ -38,8 +38,10 @@ public class RecPagos {
 	private Integer idRol;
 
 	public RecPagos(RecPagosRequest recPagosRequest) {
-		this.idVelatorio= recPagosRequest.getIdVelatorio();
+		this.claveFolio = recPagosRequest.getClaveFolio();
+		this.idVelatorio = recPagosRequest.getIdVelatorio();
 	}
+	
 	public RecPagos(UsuarioRequest usuarioRequest) {
 		this.nivel= usuarioRequest.getIdOficina();
 		this.idRol = usuarioRequest.getIdRol();
@@ -48,23 +50,24 @@ public class RecPagos {
 	public DatosRequest obtenerRecPagos(DatosRequest request) {
 		String query = "SELECT PB.ID_PAGO_BITACORA as idPagoBit, \r\n "
 						+ "PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, \r\n"
-						+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago from svt_pago_bitacora as PB"
-						+ "ORDER BY ID_PAGO_BITACORA ASC";
+						+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago FROM svt_pago_bitacora as PB "
+						+ "ORDER BY ID_PAGO_BITACORA ASC ";
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 
 		return request;
 	}
 	
-	public DatosRequest buscarFiltrosRecPagos(DatosRequest request, RecPagos recPagos) {
-		StringBuilder query = new StringBuilder("SELECT PB.ID_PAGO_BITACORA as idPagoBit, PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio,"
+	public DatosRequest buscarFiltrosRecPagos(DatosRequest request,RecPagos recPagos) {
+		
+		StringBuilder query = new StringBuilder("SELECT PB.ID_PAGO_BITACORA as idPagoBit, PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, "
 				+ " PB.CVE_ESTATUS_PAGO as claveEstatusPago "
-				+ " from svt_pago_bitacora as PB ");
+				+ " FROM svt_pago_bitacora as PB ");
 		query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0" );
-		if (recPagos.getNivel() != null) {
-			query.append(" AND R.CVE_FOLIO = ").append(this.getClaveFolio());
+		if (recPagos.getClaveFolio() != null) {
+			query.append(" AND PB.CVE_FOLIO = ").append(recPagos.getClaveFolio());
 		}		
-		query.append("ORDER BY R.ID_PAGO_BITACORA DESC");
+		query.append(" ORDER BY PB.ID_PAGO_BITACORA DESC ");
 		
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);

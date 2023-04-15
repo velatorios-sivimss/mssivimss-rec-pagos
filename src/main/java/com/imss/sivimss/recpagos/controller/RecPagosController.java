@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.imss.sivimss.recpagos.service.RecPagosService;
 import com.imss.sivimss.recpagos.util.DatosRequest;
+import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.Response;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
@@ -30,6 +31,9 @@ public class RecPagosController {
 
 	@Autowired
 	private RecPagosService recPagosService;
+	
+	@Autowired
+	private ProviderServiceRestTemplate providerRestTemplate;
 	
 	@PostMapping("/consulta")
 	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
@@ -51,4 +55,29 @@ public class RecPagosController {
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
 	
+	/**
+	 * fallbacks generico
+	 * 
+	 * @return respuestas
+	 */
+	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
+			CallNotPermittedException e) {
+		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		return CompletableFuture
+				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+	}
+
+	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
+			RuntimeException e) {
+		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		return CompletableFuture
+				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+	}
+
+	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
+			NumberFormatException e) {
+		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		return CompletableFuture
+				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+	}
 }
