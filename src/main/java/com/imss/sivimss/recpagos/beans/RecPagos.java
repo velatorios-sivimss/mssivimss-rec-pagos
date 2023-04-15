@@ -68,7 +68,7 @@ public class RecPagos {
 			query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0" );
 		if (recPagos.getClaveFolio() != null) {
 			query.append(" AND PB.CVE_FOLIO = ").append(recPagos.getClaveFolio());
-		}	
+		}
 		if (recPagos.getNomContratante() != null) {
 			query.append(" AND PB.NOM_CONTRATANTE = ").append(recPagos.getNomContratante());
 		}
