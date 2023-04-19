@@ -12,4 +12,6 @@ public interface RecPagosService {
 	
 	Response<?> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 	
+	Response<?> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException;
+	
 }
