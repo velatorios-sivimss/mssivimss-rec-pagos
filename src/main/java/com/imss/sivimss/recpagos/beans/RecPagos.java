@@ -88,12 +88,6 @@ public class RecPagos {
 			condicion = condicion + " AND PB.CVE_FOLIO = " + this.claveFolio + "  AND PB.NOM_CONTRATANTE = "
 					+ this.idVelatorio;
 		}
-	/*	if (this.fechaInicio != null && this.fechaFin != null) {
-			condicion = condicion + " AND date_format(ssd.FEC_SOLICITUD,'%Y-%m-%d') >= '" + this.fechaInicio + "'"
-					+ " AND date_format(ssd.FEC_SOLICITUD,'%Y-%m-%d') <= '" + this.fechaFin + "'";
-			condicion1 = condicion1 + " AND date_format(sd.FEC_ALTA ,'%Y-%m-%d') >= '" + this.fechaInicio + "'"
-					+ " AND date_format(sd.FEC_ALTA ,'%Y-%m-%d') <= '" + this.fechaFin + "'";
-		}*/
 		envioDatos.put("condicion", condicion);
 		envioDatos.put("tipoReporte", reporteDto.getTipoReporte());
 		envioDatos.put("rutaNombreReporte", nombrePdfReportes);

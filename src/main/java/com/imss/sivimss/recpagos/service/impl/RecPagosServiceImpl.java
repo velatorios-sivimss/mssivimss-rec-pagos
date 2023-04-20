@@ -35,7 +35,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Value("${endpoints.dominio-consulta-paginado}")
 	private String urlConsultaPaginado;
 	
-	@Value("${endpoints.pdf-reporte-rec-pagos}")
+	@Value("${generales.pdf-reporte-rec-pagos}")
 	private String nombrePdfReportes;
 	
 	@Value("${plantilla.detalle-rec-pagos}")
@@ -43,9 +43,6 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 	@Value("${endpoints.ms-reportes}")
 	private String urlReportes;
-	
-	@Value("${endpoints.tipoReporte}")
-	private String tipoReporte;
 	
 	@Value("${endpoints.dominio-crear}")
 	private String urlGenericoCrear;
