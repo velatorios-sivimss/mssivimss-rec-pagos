@@ -1,21 +1,16 @@
 package com.imss.sivimss.recpagos.service.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import com.imss.sivimss.recpagos.util.AppConstantes;
-import com.imss.sivimss.recpagos.util.ConvertirGenerico;
 import com.imss.sivimss.recpagos.util.DatosRequest;
 import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
+import com.imss.sivimss.recpagos.util.RecibosUtil;
 import com.imss.sivimss.recpagos.util.Response;
 
 import java.util.Map;
@@ -25,7 +20,8 @@ import com.imss.sivimss.recpagos.beans.RecPagos;
 import com.imss.sivimss.recpagos.model.request.PlantillaRecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.ReporteDto;
-import com.imss.sivimss.recpagos.model.request.UsuarioRequest;
+import com.imss.sivimss.recpagos.model.ReciboPago;
+import com.imss.sivimss.recpagos.model.request.UsuarioDto;
 import com.imss.sivimss.recpagos.service.RecPagosService;
 
 @Service
@@ -48,16 +44,17 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Value("${endpoints.ms-reportes}")
 	private String urlReportes;
 	
-
 	@Value("${endpoints.tipoReporte}")
 	private String tipoReporte;
+	
+	@Value("${endpoints.dominio-crear}")
+	private String urlGenericoCrear;
 	
 	@Autowired
 	private ProviderServiceRestTemplate providerRestTemplate;
 	
 	private static final String ERROR_AL_DESCARGAR_DOCUMENTO= "64"; // Error en la descarga del documento.Intenta nuevamente.
 
-	
 	@Override
 	public Response<?> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		RecPagos recPagos= new RecPagos();
@@ -75,6 +72,21 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION);
+	}
+
+	@Override
+	public Response<?> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException {
+		Gson gson = new Gson();
+
+		String datosJson = String.valueOf(request.getDatos().get(AppConstantes.DATOS));
+		UsuarioDto usuarioDto = gson.fromJson((String) authentication.getPrincipal(), UsuarioDto.class);
+		ReciboPago reciboPago = gson.fromJson(datosJson, ReciboPago.class);
+		RecibosUtil recibosUtil = new RecibosUtil();
+		DatosRequest datos = recibosUtil.insertar(reciboPago, usuarioDto.getIdUsuario().toString());
+		
+		
+		return providerRestTemplate.consumirServicio(datos.getDatos(), urlGenericoCrear,
+				authentication);
 	}
 	
 
