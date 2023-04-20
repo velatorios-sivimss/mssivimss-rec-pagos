@@ -55,6 +55,29 @@ public class RecPagosController {
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
 	
+	@PostMapping("/generarDocumento")
+	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@TimeLimiter(name = "msflujo")
+	public CompletableFuture<Object>  generarDocumento(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	
+		Response<?> response =  recPagosService.generarDocumento(request,authentication);
+		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+      
+	}
+	
+	@PostMapping("/generar-documento-det-rec-pagos")
+	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@TimeLimiter(name = "msflujo")
+	public CompletableFuture<Object>  generarDocumentoDetalle(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	
+		Response<?> response =  recPagosService.generarDocumentoDetalleRecPagos(request,authentication);
+		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+      
+	}
+	
+	
 	/**
 	 * fallbacks generico
 	 * 

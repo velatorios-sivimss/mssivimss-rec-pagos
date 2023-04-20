@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.DatatypeConverter;
 
+import com.imss.sivimss.recpagos.model.request.PlantillaRecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
+import com.imss.sivimss.recpagos.model.request.ReporteDto;
 import com.imss.sivimss.recpagos.model.request.UsuarioRequest;
 import com.imss.sivimss.recpagos.util.AppConstantes;
 import com.imss.sivimss.recpagos.util.DatosRequest;
@@ -77,6 +79,49 @@ public class RecPagos {
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 		return request;
+	}
+	
+	public Map<String, Object> generarReportePDF(ReporteDto reporteDto, String nombrePdfReportes) {
+		Map<String, Object> envioDatos = new HashMap<>();
+		String condicion = " ";
+		if (this.claveFolio != null && this.idVelatorio != null) {
+			condicion = condicion + " AND PB.CVE_FOLIO = " + this.claveFolio + "  AND PB.NOM_CONTRATANTE = "
+					+ this.idVelatorio;
+		}
+	/*	if (this.fechaInicio != null && this.fechaFin != null) {
+			condicion = condicion + " AND date_format(ssd.FEC_SOLICITUD,'%Y-%m-%d') >= '" + this.fechaInicio + "'"
+					+ " AND date_format(ssd.FEC_SOLICITUD,'%Y-%m-%d') <= '" + this.fechaFin + "'";
+			condicion1 = condicion1 + " AND date_format(sd.FEC_ALTA ,'%Y-%m-%d') >= '" + this.fechaInicio + "'"
+					+ " AND date_format(sd.FEC_ALTA ,'%Y-%m-%d') <= '" + this.fechaFin + "'";
+		}*/
+		envioDatos.put("condicion", condicion);
+		envioDatos.put("tipoReporte", reporteDto.getTipoReporte());
+		envioDatos.put("rutaNombreReporte", nombrePdfReportes);
+
+		return envioDatos;
+	}
+
+	public Map<String, Object> generarPlantillaControlSalidaDonacionPDF(
+			PlantillaRecPagosRequest plantillaRecPagosRequest, String nombrePdfDetalleRecPagos) {
+		Map<String, Object> envioDatos = new HashMap<>();
+		
+		envioDatos.put("folio", plantillaRecPagosRequest.getFolio());
+		envioDatos.put("delegacion", plantillaRecPagosRequest.getDelegacion());
+		envioDatos.put("velatorio", plantillaRecPagosRequest.getVelatorio());
+		envioDatos.put("lugar", plantillaRecPagosRequest.getLugar());
+		envioDatos.put("fecha", plantillaRecPagosRequest.getFecha());
+		envioDatos.put("recibimos", plantillaRecPagosRequest.getRecibimos());
+		envioDatos.put("cantidad", plantillaRecPagosRequest.getCantidad());
+		envioDatos.put("tramites", plantillaRecPagosRequest.getTramites());
+		envioDatos.put("descTramites", plantillaRecPagosRequest.getDescTramites());
+		envioDatos.put("derechos", plantillaRecPagosRequest.getDerechos());
+		envioDatos.put("descDerechos", plantillaRecPagosRequest.getDescDerechos());
+		envioDatos.put("total", plantillaRecPagosRequest.getTotal());
+		envioDatos.put("totalFinal", plantillaRecPagosRequest.getTotalFinal());
+		envioDatos.put("rutaNombreReporte", nombrePdfDetalleRecPagos );
+		envioDatos.put("tipoReporte", plantillaRecPagosRequest.getTipoReporte());
+		
+		return envioDatos;
 	}
 	
 }

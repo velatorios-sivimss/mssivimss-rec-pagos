@@ -17,9 +17,14 @@ import com.imss.sivimss.recpagos.util.ConvertirGenerico;
 import com.imss.sivimss.recpagos.util.DatosRequest;
 import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.Response;
+
+import java.util.Map;
+
 import com.imss.sivimss.recpagos.util.MensajeResponseUtil;
 import com.imss.sivimss.recpagos.beans.RecPagos;
+import com.imss.sivimss.recpagos.model.request.PlantillaRecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
+import com.imss.sivimss.recpagos.model.request.ReporteDto;
 import com.imss.sivimss.recpagos.model.request.UsuarioRequest;
 import com.imss.sivimss.recpagos.service.RecPagosService;
 
@@ -34,8 +39,24 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Value("${endpoints.dominio-consulta-paginado}")
 	private String urlConsultaPaginado;
 	
+	@Value("${endpoints.pdf-reporte-rec-pagos}")
+	private String nombrePdfReportes;
+	
+	@Value("${plantilla.detalle-rec-pagos}")
+	private String nombrePdfDetalleRecPagos;
+
+	@Value("${endpoints.ms-reportes}")
+	private String urlReportes;
+	
+
+	@Value("${endpoints.tipoReporte}")
+	private String tipoReporte;
+	
 	@Autowired
 	private ProviderServiceRestTemplate providerRestTemplate;
+	
+	private static final String ERROR_AL_DESCARGAR_DOCUMENTO= "64"; // Error en la descarga del documento.Intenta nuevamente.
+
 	
 	@Override
 	public Response<?> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
@@ -54,6 +75,32 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION);
+	}
+	
+
+	@Override
+	public Response<?> generarDocumento(DatosRequest request, Authentication authentication)throws IOException {
+		Gson gson = new Gson();
+		String datosJson = String.valueOf(request.getDatos().get(AppConstantes.DATOS));
+	
+		RecPagosRequest recPagosRequest = gson.fromJson(datosJson, RecPagosRequest.class);
+		RecPagos recPagos = new RecPagos(recPagosRequest);
+		
+		ReporteDto reporteDto= gson.fromJson(datosJson, ReporteDto.class);
+		Map<String, Object> envioDatos = recPagos.generarReportePDF(reporteDto, nombrePdfReportes);
+		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes,authentication)
+				, ERROR_AL_DESCARGAR_DOCUMENTO);
+		
+	}
+	
+	@Override
+	public Response<?> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication)
+			throws IOException {
+		Gson gson = new Gson();
+		PlantillaRecPagosRequest plantillaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), PlantillaRecPagosRequest.class);
+		Map<String, Object> envioDatos = new RecPagos().generarPlantillaControlSalidaDonacionPDF(plantillaRecPagosRequest,nombrePdfDetalleRecPagos);
+		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes, authentication)
+				, ERROR_AL_DESCARGAR_DOCUMENTO);
 	}
 	
 }
