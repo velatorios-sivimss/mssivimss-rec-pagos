@@ -41,6 +41,7 @@ public class RecPagos {
 
 	public RecPagos(RecPagosRequest recPagosRequest) {
 		this.claveFolio = recPagosRequest.getClaveFolio();
+		this.nomContratante = recPagosRequest.getNomContratante();
 		this.idVelatorio = recPagosRequest.getIdVelatorio();
 	}
 	
@@ -84,9 +85,9 @@ public class RecPagos {
 	public Map<String, Object> generarReportePDF(ReporteDto reporteDto, String nombrePdfReportes) {
 		Map<String, Object> envioDatos = new HashMap<>();
 		String condicion = " ";
-		if (this.claveFolio != null && this.idVelatorio != null) {
+		if (this.claveFolio != null && this.nomContratante != null) {
 			condicion = condicion + " AND PB.CVE_FOLIO = " + this.claveFolio + "  AND PB.NOM_CONTRATANTE = "
-					+ this.idVelatorio;
+					+ "\"" + this.nomContratante + "\"";
 		}
 		envioDatos.put("condicion", condicion);
 		envioDatos.put("tipoReporte", reporteDto.getTipoReporte());

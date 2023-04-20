@@ -14,6 +14,8 @@ public class ReporteDto {
 	private Integer idDelegacion;
 	private String fechaInicio;
 	private String fechaFin;
+	private String claveFolio;
+	private String nomContratante;
 	private String tipoReporte;
 	
 }
