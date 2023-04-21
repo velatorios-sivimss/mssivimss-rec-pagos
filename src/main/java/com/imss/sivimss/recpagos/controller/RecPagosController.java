@@ -77,6 +77,15 @@ public class RecPagosController {
       
 	}
 	
+	@PostMapping("/buscar-datos-rec-pagos")
+	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@TimeLimiter(name = "msflujo")
+	public CompletableFuture<?> buscarDatosReporteRecPagos(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
+		Response<?> response =   recPagosService.buscarDatosReporteRecPagos(request,authentication);
+		
+		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+	}
 	
 	/**
 	 * fallbacks generico

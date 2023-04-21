@@ -18,4 +18,6 @@ public interface RecPagosService {
 	
 	Response<?> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 
+	Response<?> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException;
+	
 }

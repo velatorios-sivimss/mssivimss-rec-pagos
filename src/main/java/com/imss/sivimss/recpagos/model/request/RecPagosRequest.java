@@ -16,6 +16,7 @@ import lombok.Setter;
 @JsonIgnoreType(value = true)
 public class RecPagosRequest {
 
+	private Integer idPagoBitacora;
 	private Integer idPagoBit;
 	private Integer idRegistro;
 	private Integer idFlujoPagos;

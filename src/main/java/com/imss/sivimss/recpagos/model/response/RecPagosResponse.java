@@ -19,7 +19,7 @@ import lombok.ToString;
 @JsonIgnoreType(value = true)
 public class RecPagosResponse {
 
-	@JsonProperty(value = "idPagoBit")
+	@JsonProperty(value = "idPagoBitacora")
 	private Integer ID_PAGO_BITACORA;
 	
 	@JsonProperty(value = "idRegistro")
