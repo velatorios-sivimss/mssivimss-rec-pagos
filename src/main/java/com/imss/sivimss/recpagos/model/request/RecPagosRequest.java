@@ -17,7 +17,6 @@ import lombok.Setter;
 public class RecPagosRequest {
 
 	private Integer idPagoBitacora;
-	private Integer idPagoBit;
 	private Integer idRegistro;
 	private Integer idFlujoPagos;
 	private Integer idVelatorio;
@@ -26,5 +25,8 @@ public class RecPagosRequest {
 	private String claveFolio;
 	private String descValor;
 	private String clavePago;
+	private Integer nivel;
+	private String fechaInicio;
+	private String fechaFin;
 	
 }

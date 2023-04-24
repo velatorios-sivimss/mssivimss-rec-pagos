@@ -14,6 +14,7 @@ public class RecPagosDto {
 	private Integer idRegistro;
 	private Integer idFlujoPagos;
 	private Integer idVelatorio;
+	private Integer nivel;
 	private String fOds;
 	private String nomContratante;
 	private String claveFolio;
