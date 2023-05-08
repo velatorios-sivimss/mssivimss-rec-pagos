@@ -35,7 +35,7 @@ public class RecibosUtil {
 		q.agregarParametroValues("CAN_TOTAL", "'" + reciboPago.getCanTotal() + "'");
 		q.agregarParametroValues("AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
 		q.agregarParametroValues("RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
-		q.agregarParametroValues("CVE_ESTATUS", "1");
+		q.agregarParametroValues("IND_ACTIVO", "1");
 		q.agregarParametroValues("ID_USUARIO_ALTA", "'" + idUsuarioAlta + "'");
 		
 		String query = q.obtenerQueryInsertar();
