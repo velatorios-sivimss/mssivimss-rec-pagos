@@ -14,7 +14,7 @@ import com.imss.sivimss.recpagos.util.NoRedirectSimpleClientHttpRequestFactory;
 @SpringBootApplication
 public class RecPagosApplication {
 
-	public static void main() {
+	public static void main(String[] args) {
 		SpringApplication.run(RecPagosApplication.class);
 	}
 
