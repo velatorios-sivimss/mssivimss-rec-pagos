@@ -1,7 +1,7 @@
 package com.imss.sivimss.recpagos.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,32 +19,32 @@ import lombok.ToString;
 @JsonIgnoreType(value = true)
 public class RecPagosResponse {
 
-	@JsonProperty(value = "idPagoBitacora")
-	private Integer ID_PAGO_BITACORA;
+	@SerializedName("ID_PAGO_BITACORA")
+	private Integer idPagoBitacora;
 	
-	@JsonProperty(value = "idRegistro")
-	private Integer ID_REGISTRO;
+	@SerializedName("ID_REGISTRO")
+	private Integer idRegistro;
 	
-	@JsonProperty(value = "idFlujoPagos")
-	private Integer ID_FLUJO_PAGOS;
+	@SerializedName("ID_FLUJO_PAGOS")
+	private Integer idFlujoPagos;
 	
-	@JsonProperty(value = "idVelatorio")
-	private Integer ID_VELATORIO;
+	@SerializedName("ID_VELATORIO")
+	private Integer idVelatorio;
 	
-	@JsonProperty(value = "fOds")
-	private String FEC_ODS;
+	@SerializedName("FEC_ODS")
+	private String fOds;
 	
-	@JsonProperty(value = "nomContratante")
-	private String NOM_CONTRATANTE;
+	@SerializedName("NOM_CONTRATANTE")
+	private String nomContratante;
 	
-	@JsonProperty(value = "claveFolio")
-	private String CVE_FOLIO;
+	@SerializedName("CVE_FOLIO")
+	private String claveFolio;
 	
-	@JsonProperty(value = "descValor")
-	private String DESC_VALOR;
+	@SerializedName("DESC_VALOR")
+	private String descValor;
 	
-	@JsonProperty(value = "clavePago")
-	private String CVE_ESTATUS_PAGO;
+	@SerializedName("CVE_ESTATUS_PAGO")
+	private String clavePago;
 
 	
 }

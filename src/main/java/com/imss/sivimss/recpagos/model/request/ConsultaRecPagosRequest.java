@@ -16,21 +16,21 @@ import lombok.Setter;
 @JsonIgnoreType(value = true)
 public class ConsultaRecPagosRequest {
 
-	private Integer idPagoBitacora;
-	private String folio;
-	private String delegacion;
-	private String velatorio;
-	private String lugar;
-	private String fecha;
-	private String recibimos;
-	private String cantidad;
-	private String tramites;
-	private String descTramites;
-	private String derechos;
-	private String descDerechos;
-	private String total;
-	private String totalFinal;
-	private String tipoReporte;
-	private String rutaNombreReporte;
+	protected Integer idPagoBitacora;
+	protected String folio;
+	protected String delegacion;
+	protected String velatorio;
+	protected String lugar;
+	protected String fecha;
+	protected String recibimos;
+	protected String cantidad;
+	protected String tramites;
+	protected String descTramites;
+	protected String derechos;
+	protected String descDerechos;
+	protected String total;
+	protected String totalFinal;
+	protected String tipoReporte;
+	protected String rutaNombreReporte;
 	
 }

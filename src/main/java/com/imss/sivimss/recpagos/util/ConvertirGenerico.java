@@ -12,6 +12,7 @@ public class ConvertirGenerico {
 		super();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T convertInstanceOfObject(Object o) {
 	    try {
 	       return (T) o;

@@ -1,6 +1,5 @@
 package com.imss.sivimss.recpagos.util;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -28,33 +27,33 @@ public class ProviderServiceRestTemplate {
 
 	private static final Logger log = LoggerFactory.getLogger(ProviderServiceRestTemplate.class);
 
-	public Response<?> consumirServicio(Map<String, Object> dato, String url, Authentication authentication)
-			throws IOException {
+	public Response<Object> consumirServicio(Map<String, Object> dato, String url, Authentication authentication) {
 		try {
-			Response<?> respuestaGenerado = restTemplateUtil.sendPostRequestByteArrayToken(url,
+			Response<Object> respuestaGenerado = restTemplateUtil.sendPostRequestByteArrayToken(url,
 					new EnviarDatosRequest(dato), jwtTokenProvider.createToken((String) authentication.getPrincipal()),
 					Response.class);
 			return validarResponse(respuestaGenerado);
-		} catch (IOException exception) {
+		} catch (Exception exception) {
 			log.error("Ha ocurrido un error al recuperar la informacion");
 			throw exception;
 		}
 	}
 
-	public Response<?> consumirServicioReportes(Map<String, Object> dato,
-			String url, Authentication authentication) throws IOException {
+	public Response<Object> consumirServicioReportes(Map<String, Object> dato,
+			String url, Authentication authentication) {
 		try {
 			Response<?> respuestaGenerado = restTemplateUtil.sendPostRequestByteArrayReportesToken(url,
 					new DatosReporteDTO(dato),
 					jwtTokenProvider.createToken((String) authentication.getPrincipal()), Response.class);
 			return validarResponse(respuestaGenerado);
-		} catch (IOException exception) {
+		} catch (Exception exception) {
 			log.error("Ha ocurrido un error al recuperar la informacion");
 			throw exception;
 		}
 	}
 
-	public Response<?> validarResponse(Response<?> respuestaGenerado) {
+	@SuppressWarnings("unchecked")
+	public Response<Object> validarResponse(Response<?> respuestaGenerado) {
 		String codigo = respuestaGenerado.getMensaje().substring(0, 3);
 		if (codigo.equals("500") || codigo.equals("404") || codigo.equals("400") || codigo.equals("403")) {
 			Gson gson = new Gson();
@@ -66,10 +65,11 @@ public class ProviderServiceRestTemplate {
 					.mensaje(apiExceptionResponse.getMensaje()).datos(apiExceptionResponse.getDatos()).build();
 
 		}
-		return respuestaGenerado;
+		return (Response<Object>) respuestaGenerado;
 	}
 
-	public Response<?> respuestaProvider(String e) {
+	@SuppressWarnings("unchecked")
+	public Response<Object> respuestaProvider(String e) {
 		StringTokenizer exeception = new StringTokenizer(e, ":");
 		Gson gson = new Gson();
 		int totalToken = exeception.countTokens();
@@ -108,7 +108,7 @@ public class ProviderServiceRestTemplate {
 
 			}
 		}
-		Response<?> response;
+		Response<Object> response;
 		try {
 			response = isExceptionResponseMs == 1 ? gson.fromJson(error.substring(2, error.length() - 1), Response.class)
 				: new Response<>(true, codigoError, error.toString().trim(), Collections.emptyList());

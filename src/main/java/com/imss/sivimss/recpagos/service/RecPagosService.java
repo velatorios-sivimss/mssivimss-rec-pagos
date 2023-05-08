@@ -8,16 +8,16 @@ import com.imss.sivimss.recpagos.util.Response;
 
 public interface RecPagosService {
 
-	Response<?> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 	
-	Response<?> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 	
-	Response<?> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException;
 
-	Response<?> generarDocumento(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> generarDocumento(DatosRequest request, Authentication authentication) throws IOException;
 	
-	Response<?> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 
-	Response<?> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException;
+	Response<Object> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 	
 }

@@ -178,7 +178,6 @@ public class SelectQueryUtil {
      * @param valor
      * @return
      */
-    @SuppressWarnings("UnusedReturnValue")
     public SelectQueryUtil setParameter(String nombre, Object valor) {
         if (this.parametros == null) {
             this.parametros = new HashMap<>();
@@ -194,7 +193,6 @@ public class SelectQueryUtil {
      * @param columna
      * @return
      */
-    @SuppressWarnings("UnusedReturnValue")
     public SelectQueryUtil orderBy(String columna) {
         this.orderBy.add(columna);
         return this;
@@ -219,21 +217,6 @@ public class SelectQueryUtil {
      * @return
      */
     public SelectQueryUtil leftJoin(String tabla, String... on) {
-        helperJoin = new Join(LEFT_JOIN, tabla, on);
-        joins.add(helperJoin);
-        isJoinCalled = true;
-        lastMethodCalled = JOIN;
-        return this;
-    }
-
-    /**
-     * Agrega la sentencia <b>{@code INNER JOIN}</b> para hacer consultas usando otras tablas.
-     *
-     * @param tabla
-     * @param on
-     * @return
-     */
-    public SelectQueryUtil innerJoin(String tabla, String on) {
         helperJoin = new Join(LEFT_JOIN, tabla, on);
         joins.add(helperJoin);
         isJoinCalled = true;
@@ -324,11 +307,8 @@ public class SelectQueryUtil {
      * @param condicion
      * @param helperCondiciones
      */
-    private void agregarParametros(StringBuilder stringBuilder, int index, String condicion, List<String> helperCondiciones) {
+    private void agregarParametros(StringBuilder stringBuilder, int index, String condicion) {
 
-        if (helperCondiciones.isEmpty()) {
-            helperCondiciones = this.condiciones;
-        }
         final boolean contieneOr = condicion.contains("#" + OR);
         final boolean contieneAndOr = contieneOr || condicion.contains("#" + AND);
         if (index != 0 &&
@@ -393,7 +373,7 @@ public class SelectQueryUtil {
         if (validarCondiciones()) {
             for (int index = 0; index < condiciones.size(); index++) {
                 String condicion = condiciones.get(index);
-                agregarParametros(stringBuilder, index, condicion, new ArrayList<>());
+                agregarParametros(stringBuilder, index, condicion);
             }
         }
     }
@@ -436,7 +416,7 @@ public class SelectQueryUtil {
         if (!condicionesTemp.isEmpty()) {
             for (int index = 0; index < condicionesTemp.size(); index++) {
                 String condicion = condicionesTemp.get(index);
-                agregarParametros(stringBuilder, index, condicion, condicionesTemp);
+                agregarParametros(stringBuilder, index, condicion);
             }
         }
     }

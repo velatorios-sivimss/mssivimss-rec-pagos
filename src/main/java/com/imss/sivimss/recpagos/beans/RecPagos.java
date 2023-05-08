@@ -10,10 +10,6 @@ import com.imss.sivimss.recpagos.model.request.ReporteDto;
 import com.imss.sivimss.recpagos.model.request.UsuarioRequest;
 import com.imss.sivimss.recpagos.util.AppConstantes;
 import com.imss.sivimss.recpagos.util.DatosRequest;
-import com.imss.sivimss.recpagos.util.QueryHelper;
-
-import com.imss.sivimss.recpagos.util.DatosRequest;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

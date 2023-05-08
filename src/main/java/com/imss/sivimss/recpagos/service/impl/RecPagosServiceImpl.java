@@ -13,7 +13,6 @@ import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.RecibosUtil;
 import com.imss.sivimss.recpagos.util.Response;
 
-import java.util.List;
 import java.util.Map;
 
 import com.imss.sivimss.recpagos.util.MensajeResponseUtil;
@@ -25,7 +24,6 @@ import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.ReporteDto;
 import com.imss.sivimss.recpagos.model.ReciboPago;
 import com.imss.sivimss.recpagos.model.request.UsuarioDto;
-import com.imss.sivimss.recpagos.model.response.ConsultaRecPagosResponse;
 import com.imss.sivimss.recpagos.service.RecPagosService;
 
 @Service
@@ -60,14 +58,14 @@ public class RecPagosServiceImpl implements RecPagosService {
 	private static final String ERROR_AL_DESCARGAR_DOCUMENTO= "64"; // Error en la descarga del documento.Intenta nuevamente.
 
 	@Override
-	public Response<?> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
+	public Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		RecPagos recPagos= new RecPagos();
 		return MensajeResponseUtil.mensajeConsultaResponse( providerRestTemplate.consumirServicio(recPagos.obtenerRecPagos(request).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION );
 	}
 
 	@Override
-	public Response<?> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException {
+	public Response<Object> buscarFiltrosRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		Gson gson = new Gson();
 		
 		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
@@ -79,7 +77,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	}
 
 	@Override
-	public Response<?> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException {
+	public Response<Object> agregarRecibo(DatosRequest request, Authentication authentication) throws IOException {
 		Gson gson = new Gson();
 
 		String datosJson = String.valueOf(request.getDatos().get(AppConstantes.DATOS));
@@ -95,7 +93,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	
 
 	@Override
-	public Response<?> generarDocumento(DatosRequest request, Authentication authentication)throws IOException {
+	public Response<Object> generarDocumento(DatosRequest request, Authentication authentication)throws IOException {
 		Gson gson = new Gson();
 		String datosJson = String.valueOf(request.getDatos().get(AppConstantes.DATOS));
 	
@@ -110,7 +108,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	}
 	
 	@Override
-	public Response<?> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication)
+	public Response<Object> generarDocumentoDetalleRecPagos(DatosRequest request, Authentication authentication)
 			throws IOException {
 		Gson gson = new Gson();
 		PlantillaRecPagosRequest plantillaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), PlantillaRecPagosRequest.class);
@@ -120,7 +118,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	}
 	
 	@Override
-	public Response<?> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException {
+	public Response<Object> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		Gson gson = new Gson();
 		
 		ConsultaRecPagosRequest consultaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), ConsultaRecPagosRequest.class);

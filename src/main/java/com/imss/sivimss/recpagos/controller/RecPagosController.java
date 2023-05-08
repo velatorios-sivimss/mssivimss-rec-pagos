@@ -39,8 +39,8 @@ public class RecPagosController {
 	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
-	public CompletableFuture<?> consultaLista(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
-		Response<?> response =   recPagosService.consultarRecPagos(request,authentication);
+	public CompletableFuture<Object> consultaLista(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
+		Response<Object> response =   recPagosService.consultarRecPagos(request,authentication);
 		
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
@@ -49,7 +49,7 @@ public class RecPagosController {
 	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
-	public CompletableFuture<?> buscar(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
+	public CompletableFuture<Object> buscar(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
 		Response<?> response =   recPagosService.buscarFiltrosRecPagos(request,authentication);
 		
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -81,7 +81,7 @@ public class RecPagosController {
 	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
-	public CompletableFuture<?> buscarDatosReporteRecPagos(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
+	public CompletableFuture<Object> buscarDatosReporteRecPagos(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
 		Response<?> response =   recPagosService.buscarDatosReporteRecPagos(request,authentication);
 		
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -92,22 +92,19 @@ public class RecPagosController {
 	 * 
 	 * @return respuestas
 	 */
-	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
-			CallNotPermittedException e) {
+	public CompletableFuture<Object> fallbackGenerico(CallNotPermittedException e) {
+		Response<Object> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		return CompletableFuture
+				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+	}
+
+	public CompletableFuture<Object> fallbackGenerico(RuntimeException e) {
 		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
 
-	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
-			RuntimeException e) {
-		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
-		return CompletableFuture
-				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
-	}
-
-	private CompletableFuture<?> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
-			NumberFormatException e) {
+	public CompletableFuture<Object> fallbackGenerico(NumberFormatException e) {
 		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -117,7 +114,7 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/agregar")
-	public CompletableFuture<?> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
 		Response<?> response =  recPagosService.agregarRecibo(request,authentication);
 		return CompletableFuture

@@ -1,8 +1,5 @@
 package com.imss.sivimss.recpagos.beans;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,34 +9,15 @@ import com.imss.sivimss.recpagos.util.AppConstantes;
 import com.imss.sivimss.recpagos.util.DatosRequest;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Setter
 @Getter
-public class ConsultarRecPagos {
-
-	private Integer idPagoBitacora;
-	private String folio;
-	private String delegacion;
-	private String velatorio;
-	private String lugar;
-	private String fecha;
-	private String recibimos;
-	private String cantidad;
-	private String tramites;
-	private String descTramites;
-	private String derechos;
-	private String descDerechos;
-	private String total;
-	private String totalFinal;
-	private String rutaNombreReporte;
-	private String tipoReporte;
+public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 	
 	@Value("${plantilla.detalle-rec-pagos}")
 	private String nombrePdfDetalleRecPagos;

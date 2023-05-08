@@ -18,8 +18,6 @@ public class ValidacionErrores {
 
 	private String mensaje;
 
-	
-
 	private long codigo;
 
 	private boolean error;

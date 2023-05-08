@@ -18,11 +18,11 @@ public class ResourceNotFoundException extends RuntimeException{
 	 */
 	private static final long serialVersionUID = -4819422371941925970L;
 
-	private String nombreRecurso;
+	private final String nombreRecurso;
 	
-	private String nombreCampo;
+	private final String nombreCampo;
 	
-	private String valorCampo;
+	private final String valorCampo;
 
 	public ResourceNotFoundException(String nombreRecurso, String nombreCampo, String valorCampo) {
 		super(String.format("%s no se encontro con %s : %s ", nombreRecurso, nombreCampo, valorCampo));
@@ -36,27 +36,12 @@ public class ResourceNotFoundException extends RuntimeException{
 		return nombreRecurso;
 	}
 
-	public void setNombreRecurso(String nombreRecurso) {
-		this.nombreRecurso = nombreRecurso;
-	}
-
 	public String getNombreCampo() {
 		return nombreCampo;
-	}
-
-	public void setNombreCampo(String nombreCampo) {
-		this.nombreCampo = nombreCampo;
 	}
 
 	public String getValorCampo() {
 		return valorCampo;
 	}
 
-	public void setValorCampo(String valorCampo) {
-		this.valorCampo = valorCampo;
-	}
-	
-	
-	
-	
 }
