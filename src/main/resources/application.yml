@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    contextPath: /mssivimss-rec-pagos/v1
+    contextPath: /mssivimss-rec-pagos
 spring:
   mvc:
     pathmatch:
