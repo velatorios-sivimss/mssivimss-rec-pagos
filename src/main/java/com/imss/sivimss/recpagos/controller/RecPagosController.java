@@ -1,6 +1,7 @@
 package com.imss.sivimss.recpagos.controller;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import com.imss.sivimss.recpagos.service.RecPagosService;
 import com.imss.sivimss.recpagos.util.DatosRequest;
 import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.Response;
+import com.imss.sivimss.recpagos.util.LogUtil;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -34,6 +36,11 @@ public class RecPagosController {
 	
 	@Autowired
 	private ProviderServiceRestTemplate providerRestTemplate;
+	
+	@Autowired
+	private LogUtil logUtil;
+	
+	private static final String CONSULTA = "consulta";
 	
 	@PostMapping("/consulta")
 	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
@@ -94,18 +101,27 @@ public class RecPagosController {
 	 */
 	public CompletableFuture<Object> fallbackGenerico(CallNotPermittedException e) {
 		Response<Object> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
 
-	public CompletableFuture<Object> fallbackGenerico(RuntimeException e) {
+	public CompletableFuture<Object> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
+			RuntimeException e) throws IOException {
 		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(),this.getClass().getSimpleName(),this.getClass().getPackage().toString(),e.getMessage(),CONSULTA+" "+ request,authentication);
+		
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
 
-	public CompletableFuture<Object> fallbackGenerico(NumberFormatException e) {
+	public CompletableFuture<Object> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
+			NumberFormatException e) throws IOException {
 		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(),this.getClass().getSimpleName(),this.getClass().getPackage().toString(),e.getMessage(),CONSULTA+" "+ request,authentication);
+		
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
@@ -114,9 +130,10 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/agregar")
-	public CompletableFuture<Object> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<?> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
 		Response<?> response =  recPagosService.agregarRecibo(request,authentication);
+
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
       

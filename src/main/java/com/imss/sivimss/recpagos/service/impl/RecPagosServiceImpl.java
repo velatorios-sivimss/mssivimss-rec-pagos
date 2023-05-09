@@ -60,7 +60,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Override
 	public Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		RecPagos recPagos= new RecPagos();
-		return MensajeResponseUtil.mensajeConsultaResponse( providerRestTemplate.consumirServicio(recPagos.obtenerRecPagos(request).getDatos(), urlConsultaPaginado,
+		return MensajeResponseUtil.mensajeConsultaResponse( providerRestTemplate.consumirServicio(recPagos.obtenerRecPagos(request, authentication).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION );
 	}
 
@@ -72,7 +72,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		RecPagos recPagos = new RecPagos(recPagosRequest);
 
-		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos(), urlConsultaPaginado,
+		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos, authentication).getDatos(), urlConsultaPaginado,
 				authentication), SIN_INFORMACION);
 	}
 
@@ -101,7 +101,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		RecPagos recPagos = new RecPagos(recPagosRequest);
 		
 		ReporteDto reporteDto= gson.fromJson(datosJson, ReporteDto.class);
-		Map<String, Object> envioDatos = recPagos.generarReportePDF(reporteDto, nombrePdfReportes);
+		Map<String, Object> envioDatos = recPagos.generarReportePDF(reporteDto, nombrePdfReportes, authentication);
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes,authentication)
 				, ERROR_AL_DESCARGAR_DOCUMENTO);
 		
@@ -112,7 +112,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 			throws IOException {
 		Gson gson = new Gson();
 		PlantillaRecPagosRequest plantillaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), PlantillaRecPagosRequest.class);
-		Map<String, Object> envioDatos = new RecPagos().generarPlantillaControlSalidaDonacionPDF(plantillaRecPagosRequest,nombrePdfDetalleRecPagos);
+		Map<String, Object> envioDatos = new RecPagos().generarPlantillaControlSalidaDonacionPDF(plantillaRecPagosRequest,nombrePdfDetalleRecPagos, authentication);
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes, authentication)
 				, ERROR_AL_DESCARGAR_DOCUMENTO);
 	}

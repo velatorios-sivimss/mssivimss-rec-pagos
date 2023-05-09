@@ -6,13 +6,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-      
-
-      
+ 
   main:
-    allow-circular-references: true
-    
-  
+    allow-circular-references: true  
         
   servlet:
     multipart:
@@ -24,10 +20,6 @@ logging:
     root: info
     org.springframework.web: info
     org.hibernate: error
-
-logos:
-  msit_logo_imss: /sivimss_data/LOGOS/logoImss.png
-  msit_logo_sistema: /sivimss_data/LOGOS/logoSistema.png
 
 endpoints:
    dominio-consulta: http://localhost:8090/mssivimss-mod-catalogos/v1/generico/consulta
@@ -80,3 +72,5 @@ resilience4j.timelimiter:
         
         
 formato_fecha: '%d/%m/%Y'
+
+ruta-log: 'C:\Users\iceballos\Documents\logs'
