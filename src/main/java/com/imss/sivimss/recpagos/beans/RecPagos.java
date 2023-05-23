@@ -53,7 +53,7 @@ public class RecPagos {
 	public DatosRequest obtenerRecPagos(DatosRequest request) {
 		String query = "SELECT PB.ID_PAGO_BITACORA as idPagoBitacora, \r\n "
 				+ "PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, \r\n" + "PB.NOM_CONTRATANTE as nomContratante, \r\n"
-				+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago FROM svt_pago_bitacora as PB "
+				+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago FROM SVT_PAGO_BITACORA as PB "
 				+ "ORDER BY ID_PAGO_BITACORA ASC ";
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
@@ -66,7 +66,7 @@ public class RecPagos {
 		StringBuilder query = new StringBuilder(
 				"SELECT PB.ID_PAGO_BITACORA as idPagoBitacora, PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, "
 						+ " PB.NOM_CONTRATANTE as nomContratante, " + " PB.CVE_ESTATUS_PAGO as claveEstatusPago "
-						+ " FROM svt_pago_bitacora as PB ");
+						+ " FROM SVT_PAGO_BITACORA as PB ");
 		query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0");
 		if (recPagos.getClaveFolio() != null) {
 			query.append(" AND PB.CVE_FOLIO = '" + this.claveFolio + "'");

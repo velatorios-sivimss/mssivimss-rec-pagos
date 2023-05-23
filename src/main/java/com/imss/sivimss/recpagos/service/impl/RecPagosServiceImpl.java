@@ -9,11 +9,15 @@ import com.google.gson.Gson;
 
 import com.imss.sivimss.recpagos.util.AppConstantes;
 import com.imss.sivimss.recpagos.util.DatosRequest;
+import com.imss.sivimss.recpagos.util.LogUtil;
 import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.RecibosUtil;
 import com.imss.sivimss.recpagos.util.Response;
 
 import java.util.Map;
+import java.util.logging.Level;
+
+import javax.xml.bind.DatatypeConverter;
 
 import com.imss.sivimss.recpagos.util.MensajeResponseUtil;
 import com.imss.sivimss.recpagos.beans.ConsultarRecPagos;
@@ -31,12 +35,9 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 	private static final String SIN_INFORMACION = "45";  // No se encontró información relacionada a tu búsqueda.
 	
-	@Value("${endpoints.dominio-consulta}")
-	private String urlConsulta;
-	
-	@Value("${endpoints.dominio-consulta-paginado}")
-	private String urlConsultaPaginado;
-	
+	@Value("${endpoints.dominio}")
+	private String urlDomino;
+
 	@Value("${generales.pdf-reporte-rec-pagos}")
 	private String nombrePdfReportes;
 	
@@ -46,22 +47,37 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Value("${endpoints.ms-reportes}")
 	private String urlReportes;
 	
-	@Value("${endpoints.dominio-crear}")
-	private String urlGenericoCrear;
-	
-	@Value("${endpoints.dominio-consulta}")
-	private String urlConsultaGenerica;
-	
 	@Autowired
 	private ProviderServiceRestTemplate providerRestTemplate;
 	
+	@Autowired
+	private LogUtil logUtil;
+	
+	private static final String CONSULTA = "consulta";
+	
 	private static final String ERROR_AL_DESCARGAR_DOCUMENTO= "64"; // Error en la descarga del documento.Intenta nuevamente.
 
+	private static final String CONSULTA_PAGINADA = "/generico/paginado";
+	
+	private static final String CREAR = "/generico/crear";
+	
+	private static final String CONSULTA_GENERICA = "/generico/consulta";
+	
 	@Override
 	public Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
 		RecPagos recPagos= new RecPagos();
-		return MensajeResponseUtil.mensajeConsultaResponse( providerRestTemplate.consumirServicio(recPagos.obtenerRecPagos(request).getDatos(), urlConsultaPaginado,
-				authentication), SIN_INFORMACION );
+		
+		Map<String, Object> dato = recPagos.obtenerRecPagos(request).getDatos();
+		String query = (String) dato.get(AppConstantes.QUERY);
+		query = new String(DatatypeConverter.parseBase64Binary(query));
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(dato, urlDomino + CONSULTA_PAGINADA, 
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
 
 	@Override
@@ -72,8 +88,18 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		RecPagos recPagos = new RecPagos(recPagosRequest);
 
-		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos(), urlConsultaPaginado,
-				authentication), SIN_INFORMACION);
+		Map<String, Object> dato = recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos();
+		String query = (String) dato.get(AppConstantes.QUERY);
+		query = new String(DatatypeConverter.parseBase64Binary(query));
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(dato
+				, urlDomino + CONSULTA_PAGINADA,
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse(response, SIN_INFORMACION);
 	}
 
 	@Override
@@ -86,8 +112,15 @@ public class RecPagosServiceImpl implements RecPagosService {
 		RecibosUtil recibosUtil = new RecibosUtil();
 		DatosRequest datos = recibosUtil.insertar(reciboPago, usuarioDto.getIdUsuario().toString());
 		
+		Map<String, Object> dato = datos.getDatos();
+		String query = (String) dato.get(AppConstantes.QUERY);
+		query = new String(DatatypeConverter.parseBase64Binary(query));
 		
-		return providerRestTemplate.consumirServicio(datos.getDatos(), urlGenericoCrear,
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+		
+		
+		return providerRestTemplate.consumirServicio(dato, urlDomino + CREAR,
 				authentication);
 	}
 	
@@ -102,6 +135,10 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		ReporteDto reporteDto= gson.fromJson(datosJson, ReporteDto.class);
 		Map<String, Object> envioDatos = recPagos.generarReportePDF(reporteDto, nombrePdfReportes);
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + envioDatos, authentication);
+		
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes,authentication)
 				, ERROR_AL_DESCARGAR_DOCUMENTO);
 		
@@ -113,6 +150,10 @@ public class RecPagosServiceImpl implements RecPagosService {
 		Gson gson = new Gson();
 		PlantillaRecPagosRequest plantillaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), PlantillaRecPagosRequest.class);
 		Map<String, Object> envioDatos = new RecPagos().generarPlantillaControlSalidaDonacionPDF(plantillaRecPagosRequest,nombrePdfDetalleRecPagos);
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + envioDatos, authentication);
+		
 		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicioReportes(envioDatos, urlReportes, authentication)
 				, ERROR_AL_DESCARGAR_DOCUMENTO);
 	}
@@ -125,8 +166,17 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		ConsultarRecPagos consultarRecPagos = new ConsultarRecPagos(consultaRecPagosRequest);
 		
-		return MensajeResponseUtil.mensajeConsultaResponse(providerRestTemplate.consumirServicio(consultarRecPagos.buscarDatosReporteRecPagos(request,consultarRecPagos).getDatos(), urlConsultaGenerica,
-				authentication), SIN_INFORMACION);
+		Map<String, Object> dato = consultarRecPagos.buscarDatosReporteRecPagos(request,consultarRecPagos).getDatos();
+		String query = (String) dato.get(AppConstantes.QUERY);
+		query = new String(DatatypeConverter.parseBase64Binary(query));
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+		
+		Response<Object> response = providerRestTemplate.consumirServicio( dato, urlDomino + CONSULTA_GENERICA, authentication );
+		
+		
+		return MensajeResponseUtil.mensajeConsultaResponse(response, SIN_INFORMACION);
 		
 	}
 
