@@ -47,7 +47,7 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 		StringBuilder query = new StringBuilder("SELECT "
 				+ " PB.CVE_FOLIO AS folio, "
 				+ " DEL.DES_DELEGACION AS delegacion, "
-				+ " VEL.NOM_VELATORIO AS velatorio, "
+				+ " VEL.DES_VELATORIO AS velatorio, "
 				+ " 'Tapachula,Chiapas,Mx' AS lugar, "
 				+ " PB.FEC_ODS AS fecha, "
 				+ " PB.NOM_CONTRATANTE AS recibimos, "
