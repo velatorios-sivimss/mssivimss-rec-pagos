@@ -23,7 +23,7 @@ public class RecibosUtil {
 		q.agregarParametroValues("NUM_FOLIO", "'" + reciboPago.getNumFolio() + "'");
 		q.agregarParametroValues("ID_DELEGACION", "'" + reciboPago.getIdDelegacion() + "'");
 		q.agregarParametroValues("ID_VELATORIO", "'" + reciboPago.getIdVelatorio() + "'");
-		q.agregarParametroValues("DESC_LUGAR", "'" + reciboPago.getDescLugar() + "'");
+		q.agregarParametroValues("ID_PAGO_DETALLE", "'" + reciboPago.getIdPagoDetalle() + "'");
 		q.agregarParametroValues("FEC_RECIBO_PAGO", "'" + reciboPago.getFecReciboPago() + "'");
 		q.agregarParametroValues("NOM_CONTRATANTE", "'" + reciboPago.getNomContratante() + "'");
 		q.agregarParametroValues("CAN_RECIBO_PAGO", "'" + reciboPago.getCanReciboPago() + "'");
@@ -51,11 +51,14 @@ public class RecibosUtil {
 		StringBuilder query = new StringBuilder("");
 		
 		query.append( "SELECT "
-				+ "OS.ID_ORDEN_SERVICIO AS idOds, "
+				+ "DISTINCT(OS.ID_ORDEN_SERVICIO) AS idOds, "
 				+ "OS.CVE_FOLIO AS folioOds "
 				+ "FROM SVC_ORDEN_SERVICIO OS "
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_REGISTRO = OS.ID_ORDEN_SERVICIO "
+				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_BITACORA = PB.ID_PAGO_BITACORA "
 				+ "WHERE "
-				+ "OS.ID_VELATORIO = '" + idVelatorio + "'");
+				+ "PB.ID_FLUJO_PAGOS = '1' "
+				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'");
 		
 		return query.toString();
 	}
