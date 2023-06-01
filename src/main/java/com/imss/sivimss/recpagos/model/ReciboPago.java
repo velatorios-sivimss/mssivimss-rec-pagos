@@ -17,10 +17,10 @@ import lombok.Setter;
 public class ReciboPago {
 	
 	private Integer idReciboPago;
+	private Integer idPagoDetalle;
 	private String numFolio;
 	private Integer idDelegacion;
 	private Integer idVelatorio;
-	private String descLugar;
 	private String fecReciboPago;
 	private String nomContratante;
 	private String canReciboPago;
