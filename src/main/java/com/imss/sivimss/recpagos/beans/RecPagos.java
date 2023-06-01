@@ -76,21 +76,40 @@ public class RecPagos {
 	public DatosRequest buscarFiltrosRecPagos(DatosRequest request, RecPagos recPagos) {
 
 		StringBuilder query = new StringBuilder(
-				"SELECT PB.ID_PAGO_BITACORA as idPagoBitacora, PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, "
-						+ " PB.NOM_CONTRATANTE as nomContratante, " + " PB.CVE_ESTATUS_PAGO as claveEstatusPago "
-						+ " FROM SVT_PAGO_BITACORA as PB ");
-		query.append(" WHERE IFNULL(ID_PAGO_BITACORA,0) > 0");
+				"SELECT "
+						+ "PD.ID_PAGO_DETALLE AS idPagoBitacora, "
+						+ "OS.FEC_ALTA AS fOds, "
+						+ "OS.CVE_FOLIO AS claveFolio, "
+						+ "PB.NOM_CONTRATANTE AS nomContratante, "
+						+ "EOS.DES_ESTATUS AS claveEstatusPago, "
+						+ "RP.ID_RECIBO_PAGO AS idReciboPago "
+						+ "FROM SVT_PAGO_DETALLE PD "
+						+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
+						+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
+						+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO "
+						+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
+						+ "WHERE "
+						+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
+						+ "AND PB.CVE_ESTATUS_PAGO = '2' ");
+		
 		if (recPagos.getClaveFolio() != null) {
-			query.append(" AND PB.CVE_FOLIO = '" + this.claveFolio + "'");
+			query.append( "AND OS.CVE_FOLIO LIKE CONCAT('" + this.claveFolio + "', '%') " );
 		}
+		
 		if (recPagos.getNomContratante() != null) {
-			query.append(" AND PB.NOM_CONTRATANTE = '" + this.nomContratante + "'");
+			query.append( "AND PB.NOM_CONTRATANTE LIKE CONCAT('" + this.nomContratante + "', '%') " );
 		}
+		
 		if (recPagos.fechaInicio != null && recPagos.fechaFin != null) {
-			query.append(" AND PB.FEC_ODS >= '" + this.fechaInicio + "'");
-			query.append(" AND PB.FEC_ODS <= '" + this.fechaFin + "'");
+			query.append(" AND OS.FEC_ALTA >= '" + this.fechaInicio + "' ");
+			query.append(" AND OS.FEC_ALTA <= '" + this.fechaFin + "' ");
 		}
-		query.append(" ORDER BY PB.ID_PAGO_BITACORA DESC ");
+		
+		if (recPagos.getIdVelatorio() != null) {
+			query.append( "AND OS.ID_VELATORIO = '" + this.idVelatorio + "' " );
+		}
+		
+		query.append(" ORDER BY OS.ID_ORDEN_SERVICIO ASC ");
 
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);

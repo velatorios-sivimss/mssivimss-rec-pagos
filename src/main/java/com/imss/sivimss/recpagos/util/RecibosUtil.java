@@ -60,4 +60,36 @@ public class RecibosUtil {
 		return query.toString();
 	}
 	
+	public String consultaTramites(String idVelatorio) {
+		StringBuilder query = new StringBuilder("");
+		
+		query.append( "SELECT "
+				+ "ID_TRAMITE AS idTramite, "
+				+ "DES_NOM_TRAMITE AS desTramite "
+				+ "FROM "
+				+ "SVC_TRAMITE "
+				+ "WHERE "
+				+ "IND_ACTIVO = '1' "
+				+ "AND  IND_TIPO_TRAMITE = '0' "
+				+ "AND ID_VELATORIO = '" + idVelatorio + "'");
+		
+		return query.toString();
+	}
+	
+	public String consultaDerechos(String idVelatorio) {
+		StringBuilder query = new StringBuilder("");
+		
+		query.append( "SELECT "
+				+ "ID_TRAMITE AS idDerecho, "
+				+ "DES_NOM_TRAMITE AS desDerecho "
+				+ "FROM "
+				+ "SVC_TRAMITE "
+				+ "WHERE "
+				+ "IND_ACTIVO = '1' "
+				+ "AND  IND_TIPO_TRAMITE = '1' "
+				+ "AND ID_VELATORIO = '" + idVelatorio + "'");
+		
+		return query.toString();
+	}
+	
 }

@@ -201,5 +201,45 @@ public class RecPagosServiceImpl implements RecPagosService {
 		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
 
+	@Override
+	public Response<Object> tramites(DatosRequest request, Authentication authentication) throws IOException {
+		RecibosUtil recibosUtil = new RecibosUtil();
+		Gson gson = new Gson();
+		
+		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
+		
+		String query = recibosUtil.consultaTramites(recPagosRequest.getIdVelatorio().toString());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
+	}
+
+	@Override
+	public Response<Object> derechos(DatosRequest request, Authentication authentication) throws IOException {
+		RecibosUtil recibosUtil = new RecibosUtil();
+		Gson gson = new Gson();
+		
+		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
+		
+		String query = recibosUtil.consultaDerechos(recPagosRequest.getIdVelatorio().toString());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
+	}
+
 
 }
