@@ -20,4 +20,5 @@ public interface RecPagosService {
 
 	Response<Object> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException;
 	
+	Response<Object> foliosOds(DatosRequest request, Authentication authentication) throws IOException;
 }

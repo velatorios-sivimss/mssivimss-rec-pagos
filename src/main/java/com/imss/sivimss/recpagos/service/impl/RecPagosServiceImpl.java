@@ -69,7 +69,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = recPagos.obtenerRecPagos(request).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query));
+		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -90,7 +90,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 		Map<String, Object> dato = recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query));
+		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -114,7 +114,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = datos.getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query));
+		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -168,7 +168,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = consultarRecPagos.buscarDatosReporteRecPagos(request,consultarRecPagos).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query));
+		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -178,6 +178,27 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		return MensajeResponseUtil.mensajeConsultaResponse(response, SIN_INFORMACION);
 		
+	}
+
+	@Override
+	public Response<Object> foliosOds(DatosRequest request, Authentication authentication) throws IOException {
+		
+		RecibosUtil recibosUtil = new RecibosUtil();
+		Gson gson = new Gson();
+		
+		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
+		
+		String query = recibosUtil.consultaFolios(recPagosRequest.getIdVelatorio().toString());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
 
 

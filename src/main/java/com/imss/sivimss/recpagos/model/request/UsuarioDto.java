@@ -10,13 +10,13 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioDto {
 
-	private Integer idVelatorio;
+	private String idVelatorio;
 
 	private Integer idRol;
 
 	private Integer idDelegacion;
 	
-	private Integer idOficina;
+	private String idOficina;
 
 	private Integer idUsuario;
 	

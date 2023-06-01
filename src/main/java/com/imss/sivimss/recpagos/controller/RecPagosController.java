@@ -138,4 +138,17 @@ public class RecPagosController {
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
       
 	}
+	
+	@CircuitBreaker(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
+	@TimeLimiter(name = "msflujo")
+	@PostMapping("/consulta/foliosOds")
+	public CompletableFuture<?> foliosOds(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	
+		Response<?> response =  recPagosService.foliosOds(request,authentication);
+
+		return CompletableFuture
+				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
+      
+	}
 }
