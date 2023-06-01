@@ -51,10 +51,22 @@ public class RecPagos {
 	}
 
 	public DatosRequest obtenerRecPagos(DatosRequest request) {
-		String query = "SELECT PB.ID_PAGO_BITACORA as idPagoBitacora, \r\n "
-				+ "PB.FEC_ODS as fOds, PB.CVE_FOLIO as claveFolio, \r\n" + "PB.NOM_CONTRATANTE as nomContratante, \r\n"
-				+ "PB.CVE_ESTATUS_PAGO as claveEstatusPago FROM SVT_PAGO_BITACORA as PB "
-				+ "ORDER BY ID_PAGO_BITACORA ASC ";
+		String query = "SELECT "
+				+ "PD.ID_PAGO_DETALLE AS idPagoBitacora, "
+				+ "OS.FEC_ALTA AS fOds, "
+				+ "OS.CVE_FOLIO AS claveFolio, "
+				+ "PB.NOM_CONTRATANTE AS nomContratante, "
+				+ "EOS.DES_ESTATUS AS claveEstatusPago, "
+				+ "RP.ID_RECIBO_PAGO AS idReciboPago "
+				+ "FROM SVT_PAGO_DETALLE PD "
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
+				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
+				+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO "
+				+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
+				+ "WHERE "
+				+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
+				+ "AND PB.CVE_ESTATUS_PAGO = '2' "
+				+ "ORDER BY OS.ID_ORDEN_SERVICIO ASC ";
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 

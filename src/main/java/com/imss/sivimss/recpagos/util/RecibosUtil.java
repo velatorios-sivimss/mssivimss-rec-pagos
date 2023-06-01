@@ -47,4 +47,17 @@ public class RecibosUtil {
 		return request;
 	}
 	
+	public String consultaFolios(String idVelatorio) {
+		StringBuilder query = new StringBuilder("");
+		
+		query.append( "SELECT "
+				+ "OS.ID_ORDEN_SERVICIO AS idOds, "
+				+ "OS.CVE_FOLIO AS folioOds "
+				+ "FROM SVC_ORDEN_SERVICIO OS "
+				+ "WHERE "
+				+ "OS.ID_VELATORIO = '" + idVelatorio + "'");
+		
+		return query.toString();
+	}
+	
 }
