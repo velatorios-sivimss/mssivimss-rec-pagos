@@ -65,7 +65,8 @@ public class RecibosUtil {
 		
 		query.append( "SELECT "
 				+ "ID_TRAMITE AS idTramite, "
-				+ "DES_NOM_TRAMITE AS desTramite "
+				+ "DES_NOM_TRAMITE AS desTramite, "
+				+ "IMP_TRAMITE AS importe "
 				+ "FROM "
 				+ "SVC_TRAMITE "
 				+ "WHERE "
@@ -81,7 +82,8 @@ public class RecibosUtil {
 		
 		query.append( "SELECT "
 				+ "ID_TRAMITE AS idDerecho, "
-				+ "DES_NOM_TRAMITE AS desDerecho "
+				+ "DES_NOM_TRAMITE AS desDerecho, "
+				+ "IMP_TRAMITE AS importe "
 				+ "FROM "
 				+ "SVC_TRAMITE "
 				+ "WHERE "
