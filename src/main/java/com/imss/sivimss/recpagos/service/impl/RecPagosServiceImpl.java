@@ -1,6 +1,8 @@
 package com.imss.sivimss.recpagos.service.impl;
 
 import java.io.IOException;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -8,13 +10,17 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import com.imss.sivimss.recpagos.util.AppConstantes;
+import com.imss.sivimss.recpagos.util.ConvertirImporteLetra;
 import com.imss.sivimss.recpagos.util.DatosRequest;
 import com.imss.sivimss.recpagos.util.LogUtil;
 import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.RecibosUtil;
 import com.imss.sivimss.recpagos.util.Response;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -56,6 +62,9 @@ public class RecPagosServiceImpl implements RecPagosService {
 	
 	@Autowired
 	private LogUtil logUtil;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	private static final String CONSULTA = "consulta";
 	
@@ -170,9 +179,12 @@ public class RecPagosServiceImpl implements RecPagosService {
 				, ERROR_AL_DESCARGAR_DOCUMENTO);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Response<Object> buscarDatosReporteRecPagos(DatosRequest request, Authentication authentication) throws IOException {
+		
 		Gson gson = new Gson();
+		List<Map<String, Object>> listadatos;
 		
 		ConsultaRecPagosRequest consultaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), ConsultaRecPagosRequest.class);
 		
@@ -186,6 +198,22 @@ public class RecPagosServiceImpl implements RecPagosService {
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 		
 		Response<Object> response = providerRestTemplate.consumirServicio( dato, urlDomino + CONSULTA_GENERICA, authentication );
+	
+		
+		if (response.getCodigo() == 200) {
+			
+			listadatos = Arrays.asList(modelMapper.map(response.getDatos(), Map[].class));
+			dato = listadatos.get(0);
+			Double cantidadD = (Double) dato.get("cantidad");
+			
+			Integer cantidadI = cantidadD.intValue();
+			String cantidadLetra = ConvertirImporteLetra.importeEnTexto(cantidadI);
+			dato.put("cantidadLetra", cantidadLetra);
+			listadatos = new ArrayList<>();
+			listadatos.add(dato);
+			response.setDatos(listadatos);
+			;
+		}
 		
 		
 		return MensajeResponseUtil.mensajeConsultaResponse(response, SIN_INFORMACION);
