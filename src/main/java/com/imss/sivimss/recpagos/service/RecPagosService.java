@@ -25,4 +25,6 @@ public interface RecPagosService {
 	Response<Object> tramites(DatosRequest request, Authentication authentication) throws IOException;
 	
 	Response<Object> derechos(DatosRequest request, Authentication authentication) throws IOException;
+	
+	Response<Object> reciboPago(DatosRequest request, Authentication authentication) throws IOException;
 }

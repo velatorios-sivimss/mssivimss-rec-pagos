@@ -253,5 +253,11 @@ public class RecPagosServiceImpl implements RecPagosService {
 		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
 
+	@Override
+	public Response<Object> reciboPago(DatosRequest request, Authentication authentication) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
