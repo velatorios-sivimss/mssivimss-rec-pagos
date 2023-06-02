@@ -28,5 +28,5 @@ public class RecPagosRequest {
 	private Integer nivel;
 	private String fechaInicio;
 	private String fechaFin;
-	
+	private Integer idReciboPago;
 }
