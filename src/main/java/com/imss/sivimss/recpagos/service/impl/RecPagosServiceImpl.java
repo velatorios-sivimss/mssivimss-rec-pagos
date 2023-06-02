@@ -14,6 +14,7 @@ import com.imss.sivimss.recpagos.util.ProviderServiceRestTemplate;
 import com.imss.sivimss.recpagos.util.RecibosUtil;
 import com.imss.sivimss.recpagos.util.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -122,9 +123,17 @@ public class RecPagosServiceImpl implements RecPagosService {
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 		
-		
-		return providerRestTemplate.consumirServicio(dato, urlDomino + CREAR,
+		Response<Object> respuesta = providerRestTemplate.consumirServicio(dato, urlDomino + CREAR,
 				authentication);
+		
+		Integer id = (Integer) respuesta.getDatos();
+		String folio = String.format("%05d",id);;
+		folio = folio + reciboPago.getIdVelatorio();
+		dato = new HashMap<>();
+		dato.put("folio", folio);
+		respuesta.setDatos(dato);
+		
+		return respuesta;
 	}
 	
 
