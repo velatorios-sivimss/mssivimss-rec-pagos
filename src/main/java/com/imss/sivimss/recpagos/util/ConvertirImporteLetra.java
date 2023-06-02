@@ -4,10 +4,29 @@ public class ConvertirImporteLetra {
 	
 	public static String importeEnTexto(int iImporte ) {
 		String strImporte;
+		int iUnidad;
+		int iDMillar=0;
+		
+		String pesos = " PESOS 00/100 M.N.";
+		
 		// Obtiene unidad
-		int iUnidad = iImporte%10;
-		iImporte = iImporte/10;		
-		strImporte = ConvertirImporteLetra.unidadEnTexto(iUnidad);
+		if(iImporte == 1) {
+			return "UN PESO 00/100 M.N.";
+		}
+		
+		if(iImporte < 10 ) {
+			iUnidad = iImporte;
+			iImporte = 0;
+		}else {
+			iUnidad = iImporte%10;
+			iImporte = iImporte/10;
+		}		
+		
+		strImporte = unidadEnTexto(iUnidad);
+		
+		if( iImporte == 0 ) {
+			return strImporte.trim() + pesos;
+		}
 		
 		// Obtiene decena
 		int iDecena = iImporte%10;
@@ -20,18 +39,35 @@ public class ConvertirImporteLetra {
 			strImporte = decenaEnTexto(iDecena) + " Y " + strImporte;
 		}
 		
+		if( iImporte == 0 ) {
+			return strImporte.trim() + pesos;
+		}
+		
 		// Obtiene centena
 		int iCentena = iImporte%10;
 		iImporte = iImporte/10;
-		if ((iCentena!=1) && (iCentena!=5) && (iCentena!=9) && (iCentena!=0)) {
-			strImporte = unidadEnTexto(iCentena) + "CIENTOS " + strImporte;
-		} else if ((iCentena==1) || (iCentena==5) || (iCentena==9)) {
-			strImporte = centenaEnTexto(iCentena) + " " + strImporte;
+		
+		if(iCentena > 0) {
+		
+			if ((iCentena!=1) && (iCentena!=5) && (iCentena!=9) && (iCentena!=0)) {
+				strImporte = unidadEnTexto(iCentena) + "CIENTOS" + strImporte;
+			} else if ( (iCentena==5) || (iCentena==9) ) {
+				strImporte = centenaEnTexto(iCentena) + " " + strImporte;
+			}else if( (iCentena == 1) && (iDecena==0) && (iUnidad == 0) ) {
+				strImporte = "CIEN" + strImporte;
+			}else {
+				strImporte = centenaEnTexto(iCentena) + " " + strImporte;
+			}
+			
+		}
+		
+		if( iImporte == 0 ) {
+			return strImporte.trim() + pesos;
 		}
 		
 		// Obtiene millar
 		int iMillar = iImporte%10;
-		if (!(iImporte > 10 && iImporte < 20)) {
+		if (!(iImporte > 10 && iImporte < 20) && (iMillar !=0) ) {
 			if (iMillar == 1) {
 				strImporte = "MIL " + strImporte; 
 			} else {
@@ -40,10 +76,14 @@ public class ConvertirImporteLetra {
 		}
 		iImporte = iImporte/10;
 		
+		if( iImporte == 0 ) {
+			return strImporte.trim() + pesos;
+		}
+		
 		// Obtiene diez millar
 		if (iImporte > 0) {
-			int iDMillar = iImporte%10;
-			//iImporte = iImporte/10;
+			iDMillar = iImporte%10;
+			iImporte = iImporte/10;
 			if (iMillar==0 && iDMillar>0) {
 				strImporte = decenaEnTexto(iDMillar) + " MIL " + strImporte;
 			} else if (iDMillar==1) {
@@ -53,7 +93,27 @@ public class ConvertirImporteLetra {
 			}
 		}
 		
-		return strImporte + " 00/100 M.N.";
+		if( iImporte == 0 ) {
+			return strImporte.trim() + pesos;
+		}
+		
+		if( (iDMillar ==0) && iMillar==0) {
+			strImporte = " MIL" + strImporte;
+		}
+		
+		int iCMillar = iImporte%10;
+		iImporte = iImporte/10;
+		if ((iCMillar!=1) && (iCMillar!=5) && (iCMillar!=9) && (iCMillar!=0)) {
+			strImporte = unidadEnTexto(iCMillar) + "CIENTOS " + strImporte;
+		} else if ( (iCMillar==5) || (iCMillar==9) ) {
+			strImporte = centenaEnTexto(iCMillar) + " " + strImporte;
+		}else if( (iCMillar == 1) && (iDMillar==0) && (iMillar == 0) ) {
+			strImporte = "CIEN" + strImporte;
+		}else {
+			strImporte = centenaEnTexto(iCMillar) + " " + strImporte;
+		}
+		
+		return strImporte.trim() + pesos;
 	}
 	
 	private static String unidadEnTexto(int iNumero){
@@ -76,8 +136,6 @@ public class ConvertirImporteLetra {
 				return "OCHO";
 			case 9:
 				return "NUEVE";
-			case 0:
-				return "CERO";
 			default:
 				return "";
 		 }
