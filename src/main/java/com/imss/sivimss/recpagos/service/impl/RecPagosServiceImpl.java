@@ -187,7 +187,6 @@ public class RecPagosServiceImpl implements RecPagosService {
 		List<Map<String, Object>> listadatos;
 		
 		ConsultaRecPagosRequest consultaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), ConsultaRecPagosRequest.class);
-		
 		ConsultarRecPagos consultarRecPagos = new ConsultarRecPagos(consultaRecPagosRequest);
 		
 		Map<String, Object> dato = consultarRecPagos.buscarDatosReporteRecPagos(request,consultarRecPagos).getDatos();
@@ -212,9 +211,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 			listadatos = new ArrayList<>();
 			listadatos.add(dato);
 			response.setDatos(listadatos);
-			;
 		}
-		
 		
 		return MensajeResponseUtil.mensajeConsultaResponse(response, SIN_INFORMACION);
 		
@@ -301,6 +298,5 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
-
 
 }
