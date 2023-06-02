@@ -255,8 +255,23 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 	@Override
 	public Response<Object> reciboPago(DatosRequest request, Authentication authentication) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		RecibosUtil recibosUtil = new RecibosUtil();
+		Gson gson = new Gson();
+		
+		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
+		
+		String query = recibosUtil.consultaReciboPago(recPagosRequest.getIdReciboPago().toString());
+		
+		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
+				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
+
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		
+		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
+				authentication);
+		
+		return MensajeResponseUtil.mensajeConsultaResponse( response, SIN_INFORMACION );
 	}
 
 

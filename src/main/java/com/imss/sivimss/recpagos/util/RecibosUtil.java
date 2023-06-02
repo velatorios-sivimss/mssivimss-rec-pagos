@@ -97,4 +97,43 @@ public class RecibosUtil {
 		return query.toString();
 	}
 	
+	public String consultaReciboPago(String idReciboPago) {
+		
+		StringBuilder query = new StringBuilder("");
+		
+		query.append( "SELECT \r\n"
+				+ "RP.NUM_FOLIO AS claveFolio, \r\n"
+				+ "DEL.DES_DELEGACION AS delegacion, \r\n"
+				+ "VEL.DES_VELATORIO AS velatorio, \r\n"
+				+ "RP.FEC_RECIBO_PAGO AS fecha, \r\n"
+				+ "RP.NOM_CONTRATANTE AS recibimos, \r\n"
+				+ "RP.CAN_RECIBO_PAGO AS cantidad, \r\n"
+				+ "'reportes/plantilla/DetalleRecPagos.jrxml' AS rutaNombreReporte, \r\n"
+				+ "'pdf' AS tipoReporte, \r\n"
+				+ "OS.ID_VELATORIO AS idVelatorio,\r\n"
+				+ "RP.CAN_TRAMITES AS canTramites,\r\n"
+				+ "RP.DESC_TRAMITES AS descTramites,\r\n"
+				+ "RP.CAN_DERECHOS AS canDerechos,\r\n"
+				+ "RP.DESC_DERECHOS AS descDerechos,\r\n"
+				+ "RP.CAN_SUMA AS canSuma,\r\n"
+				+ "RP.CAN_TOTAL AS canTotal,\r\n"
+				+ "RP.DES_AGENTE_FUNERAL_MAT AS agenteFuneMat,\r\n"
+				+ "RP.DES_RECIBE_MAT AS recibeMat,\r\n"
+				+ "IFNULL( CPF.DES_FOLIO, 'NA') AS folioPF,\r\n"
+				+ "CONCAT(LPAD(RP.ID_RECIBO_PAGO, 5, '0'), OS.ID_VELATORIO ) AS folio\r\n"
+				+ "FROM SVT_RECIBO_PAGO RP\r\n"
+				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_DETALLE = RP.ID_PAGO_DETALLE\r\n"
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA\r\n"
+				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO\r\n"
+				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = RP.ID_VELATORIO\r\n"
+				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = RP.ID_DELEGACION\r\n"
+				+ "INNER JOIN SVC_FINADO F ON F.ID_ORDEN_SERVICIO = OS.ID_ORDEN_SERVICIO\r\n"
+				+ "LEFT JOIN SVT_CONVENIO_PF CPF ON CPF.ID_CONVENIO_PF = F.ID_CONTRATO_PREVISION\r\n"
+				+ "WHERE " );
+		query.append( "RP.ID_RECIBO_PAGO = '" + idReciboPago + "' " );
+		query.append( "LIMIT 1" );
+		
+		return query.toString();
+	}
+	
 }
