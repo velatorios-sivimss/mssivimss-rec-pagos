@@ -47,6 +47,9 @@ public class RecPagosServiceImpl implements RecPagosService {
 	@Value("${endpoints.ms-reportes}")
 	private String urlReportes;
 	
+	@Value("${formato_fecha}")
+	private String formato;
+	
 	@Autowired
 	private ProviderServiceRestTemplate providerRestTemplate;
 	

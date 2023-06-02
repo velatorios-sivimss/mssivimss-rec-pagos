@@ -101,8 +101,8 @@ public class RecPagos {
 		}
 		
 		if (recPagos.fechaInicio != null && recPagos.fechaFin != null) {
-			query.append(" AND OS.FEC_ALTA >= '" + this.fechaInicio + "' ");
-			query.append(" AND OS.FEC_ALTA <= '" + this.fechaFin + "' ");
+			query.append("AND OS.FEC_ALTA BETWEEN '" + this.fechaInicio + "'"
+					+ " AND '" + this.fechaFin + "' ");
 		}
 		
 		if (recPagos.getIdVelatorio() != null) {
