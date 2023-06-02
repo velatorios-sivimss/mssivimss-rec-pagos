@@ -33,8 +33,8 @@ public class RecibosUtil {
 		q.agregarParametroValues("DESC_DERECHOS", "'" + reciboPago.getDescDerechos() + "'");
 		q.agregarParametroValues("CAN_SUMA", "'" + reciboPago.getCanSuma() + "'");
 		q.agregarParametroValues("CAN_TOTAL", "'" + reciboPago.getCanTotal() + "'");
-		q.agregarParametroValues("AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
-		q.agregarParametroValues("RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
+		q.agregarParametroValues("DES_AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
+		q.agregarParametroValues("DES_RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
 		q.agregarParametroValues("IND_ACTIVO", "1");
 		q.agregarParametroValues("ID_USUARIO_ALTA", "'" + idUsuarioAlta + "'");
 		
