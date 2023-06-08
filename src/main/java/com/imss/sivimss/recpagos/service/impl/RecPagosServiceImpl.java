@@ -70,11 +70,11 @@ public class RecPagosServiceImpl implements RecPagosService {
 	
 	private static final String ERROR_AL_DESCARGAR_DOCUMENTO= "64"; // Error en la descarga del documento.Intenta nuevamente.
 
-	private static final String CONSULTA_PAGINADA = "/generico/paginado";
+	private static final String CONSULTA_PAGINADA = "/paginado";
 	
-	private static final String CREAR = "/generico/crear";
+	private static final String CREAR = "/crear";
 	
-	private static final String CONSULTA_GENERICA = "/generico/consulta";
+	private static final String CONSULTA_GENERICA = "/consulta";
 	
 	@Override
 	public Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
