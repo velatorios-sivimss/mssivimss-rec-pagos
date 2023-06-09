@@ -28,10 +28,10 @@ endpoints:
    ms-reportes:  ${msit_REPORTES_GENERALES}
 
 generales:
-  pdf-reporte-rec-pagos: reportes/generales/ReporteFiltrosRecPagos.jrxml
+  pdf-reporte-rec-pagos:  ${msit_RUTA_FILTROREPRECPAG}
 
 plantilla:
-  detalle-rec-pagos: reportes/plantilla/DetalleRecPagos.jrxml
+  detalle-rec-pagos: ${msit_RUTA_REPDETRECPAG} 
 
 jwt:
   secretkey-flujo: ${msit_SECRET_KEY}
