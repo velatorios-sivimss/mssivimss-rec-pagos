@@ -66,6 +66,7 @@ public class RecPagos {
 				+ "WHERE "
 				+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
 				+ "AND PB.CVE_ESTATUS_PAGO = '2' "
+				+ "AND PB.ID_FLUJO_PAGOS = '1' "
 				+ "ORDER BY OS.ID_ORDEN_SERVICIO ASC ";
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
@@ -90,7 +91,8 @@ public class RecPagos {
 						+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
 						+ "WHERE "
 						+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-						+ "AND PB.CVE_ESTATUS_PAGO = '2' ");
+						+ "AND PB.CVE_ESTATUS_PAGO = '2' "
+						+ "AND PB.ID_FLUJO_PAGOS = '1' ");
 		
 		if (recPagos.getClaveFolio() != null) {
 			query.append( "AND OS.CVE_FOLIO LIKE CONCAT('" + this.claveFolio + "', '%') " );
