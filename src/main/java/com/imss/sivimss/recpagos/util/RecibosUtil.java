@@ -58,6 +58,7 @@ public class RecibosUtil {
 				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_BITACORA = PB.ID_PAGO_BITACORA "
 				+ "WHERE "
 				+ "PB.ID_FLUJO_PAGOS = '1' "
+				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
 				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'");
 		
 		return query.toString();
