@@ -99,9 +99,9 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		RecPagosRequest recPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), RecPagosRequest.class);
 		
-		RecPagos recPagos = new RecPagos(recPagosRequest);
+		RecPagos recPagos = new RecPagos();
 
-		Map<String, Object> dato = recPagos.buscarFiltrosRecPagos(request,recPagos).getDatos();
+		Map<String, Object> dato = recPagos.buscarFiltrosRecPagos(request,recPagosRequest).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
 		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
 		

@@ -26,7 +26,7 @@ public class RecPagosRequest {
 	private String descValor;
 	private String clavePago;
 	private Integer nivel;
-	private String fechaInicio;
-	private String fechaFin;
+	private String fecIniODS;
+	private String fecFinODS;
 	private Integer idReciboPago;
 }
