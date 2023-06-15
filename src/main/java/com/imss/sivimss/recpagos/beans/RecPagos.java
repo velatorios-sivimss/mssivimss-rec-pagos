@@ -40,8 +40,8 @@ public class RecPagos {
 	public RecPagos(RecPagosRequest recPagosRequest) {
 		this.claveFolio = recPagosRequest.getClaveFolio();
 		this.nomContratante = recPagosRequest.getNomContratante();
-		this.fechaInicio = recPagosRequest.getFechaInicio();
-		this.fechaFin = recPagosRequest.getFechaFin();
+		this.fechaInicio = recPagosRequest.getFecIniODS();
+		this.fechaFin = recPagosRequest.getFecFinODS();
 		this.nivel = recPagosRequest.getNivel();
 	}
 
@@ -74,7 +74,7 @@ public class RecPagos {
 		return request;
 	}
 
-	public DatosRequest buscarFiltrosRecPagos(DatosRequest request, RecPagos recPagos) {
+	public DatosRequest buscarFiltrosRecPagos(DatosRequest request, RecPagosRequest recPagos) {
 
 		StringBuilder query = new StringBuilder(
 				"SELECT "
@@ -95,20 +95,20 @@ public class RecPagos {
 						+ "AND PB.ID_FLUJO_PAGOS = '1' ");
 		
 		if (recPagos.getClaveFolio() != null) {
-			query.append( "AND OS.CVE_FOLIO LIKE CONCAT('" + this.claveFolio + "', '%') " );
+			query.append( "AND OS.CVE_FOLIO LIKE CONCAT('" + recPagos.getClaveFolio() + "', '%') " );
 		}
 		
 		if (recPagos.getNomContratante() != null) {
-			query.append( "AND PB.NOM_CONTRATANTE LIKE CONCAT('" + this.nomContratante + "', '%') " );
+			query.append( "AND PB.NOM_CONTRATANTE LIKE CONCAT('" + recPagos.getNomContratante() + "', '%') " );
 		}
 		
-		if (recPagos.fechaInicio != null && recPagos.fechaFin != null) {
-			query.append("AND OS.FEC_ALTA BETWEEN '" + this.fechaInicio + "'"
-					+ " AND '" + this.fechaFin + "' ");
+		if (recPagos.getFecIniODS() != null && recPagos.getFecFinODS() != null) {
+			query.append("AND OS.FEC_ALTA BETWEEN '" + recPagos.getFecIniODS() + "'"
+					+ " AND '" + recPagos.getFecFinODS() + "' ");
 		}
 		
 		if (recPagos.getIdVelatorio() != null) {
-			query.append( "AND OS.ID_VELATORIO = '" + this.idVelatorio + "' " );
+			query.append( "AND OS.ID_VELATORIO = '" + recPagos.getIdVelatorio() + "' " );
 		}
 		
 		query.append(" ORDER BY OS.ID_ORDEN_SERVICIO ASC ");
