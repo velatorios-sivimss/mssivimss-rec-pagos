@@ -20,6 +20,7 @@ public class RecPagosRequest {
 	private Integer idRegistro;
 	private Integer idFlujoPagos;
 	private Integer idVelatorio;
+	private Integer idDelegacion;
 	private String fOds;
 	private String nomContratante;
 	private String claveFolio;
