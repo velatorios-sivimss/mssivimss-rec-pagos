@@ -88,6 +88,7 @@ public class RecPagos {
 						+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
 						+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
 						+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO "
+						+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO "
 						+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
 						+ "WHERE "
 						+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
@@ -109,6 +110,10 @@ public class RecPagos {
 		
 		if (recPagos.getIdVelatorio() != null) {
 			query.append( "AND OS.ID_VELATORIO = '" + recPagos.getIdVelatorio() + "' " );
+		}
+		
+		if (recPagos.getIdDelegacion() != null) {
+			query.append( "AND VEL.ID_DELEGACION = '" + recPagos.getIdDelegacion() + "' " );
 		}
 		
 		query.append(" ORDER BY OS.ID_ORDEN_SERVICIO ASC ");
