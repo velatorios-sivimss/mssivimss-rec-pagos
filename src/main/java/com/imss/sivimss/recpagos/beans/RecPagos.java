@@ -159,6 +159,7 @@ public class RecPagos {
 		envioDatos.put("totalFinal", plantillaRecPagosRequest.getTotalFinal());
 		envioDatos.put("rutaNombreReporte", nombrePdfDetalleRecPagos);
 		envioDatos.put("tipoReporte", plantillaRecPagosRequest.getTipoReporte());
+		envioDatos.put("folioPF", plantillaRecPagosRequest.getFolioPF());
 
 		return envioDatos;
 	}

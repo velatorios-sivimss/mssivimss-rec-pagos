@@ -37,5 +37,7 @@ public class PlantillaRecPagosRequest {
 	private String rutaNombreReporte;
 	@JsonProperty
 	private String tipoReporte;
+	@JsonProperty
+	private String folioPF;
 	
 }
