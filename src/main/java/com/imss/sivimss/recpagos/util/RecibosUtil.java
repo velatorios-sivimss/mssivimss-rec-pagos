@@ -59,7 +59,8 @@ public class RecibosUtil {
 				+ "WHERE "
 				+ "PB.ID_FLUJO_PAGOS = '1' "
 				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'");
+				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'"
+				+ "AND PD.CVE_ESTATUS = '4' ");
 		
 		return query.toString();
 	}

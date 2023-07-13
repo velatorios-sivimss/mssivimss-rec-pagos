@@ -92,7 +92,7 @@ public class RecPagos {
 						+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
 						+ "WHERE "
 						+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-						+ "AND PB.CVE_ESTATUS_PAGO = '2' "
+						+ "AND PB.CVE_ESTATUS_PAGO IN (2, 4, 8) "
 						+ "AND PB.ID_FLUJO_PAGOS = '1' ");
 		
 		if (recPagos.getClaveFolio() != null) {
