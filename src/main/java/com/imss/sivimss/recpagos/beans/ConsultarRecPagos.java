@@ -50,7 +50,7 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 				+ "VEL.DES_VELATORIO AS velatorio, \r\n"
 				+ "OS.FEC_ALTA AS fecha, \r\n"
 				+ "PB.NOM_CONTRATANTE AS recibimos, \r\n"
-				+ "PD.IMP_IMPORTE AS cantidad, \r\n"
+				+ "PD.IMP_PAGO AS cantidad, \r\n"
 				+ "'reportes/plantilla/DetalleRecPagos.jrxml' AS rutaNombreReporte, \r\n"
 				+ "'pdf' AS tipoReporte, \r\n"
 				+ "OS.ID_VELATORIO AS idVelatorio,\r\n "

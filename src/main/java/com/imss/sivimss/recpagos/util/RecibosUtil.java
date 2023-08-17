@@ -28,12 +28,12 @@ public class RecibosUtil {
 		q.agregarParametroValues("NOM_CONTRATANTE", "'" + reciboPago.getNomContratante() + "'");
 		q.agregarParametroValues("CAN_RECIBO_PAGO", "'" + reciboPago.getCanReciboPago() + "'");
 		q.agregarParametroValues("CAN_TRAMITES", "'" + reciboPago.getCanTramites() + "'");
-		q.agregarParametroValues("DESC_TRAMITES", "'" + reciboPago.getDescTramites() + "'");
+		q.agregarParametroValues("REF_TRAMITES", "'" + reciboPago.getDescTramites() + "'");
 		q.agregarParametroValues("CAN_DERECHOS", "'" + reciboPago.getCanDerechos() + "'");
-		q.agregarParametroValues("DESC_DERECHOS", "'" + reciboPago.getDescDerechos() + "'");
+		q.agregarParametroValues("REF_DERECHOS", "'" + reciboPago.getDescDerechos() + "'");
 		q.agregarParametroValues("CAN_SUMA", "'" + reciboPago.getCanSuma() + "'");
 		q.agregarParametroValues("CAN_TOTAL", "'" + reciboPago.getCanTotal() + "'");
-		q.agregarParametroValues("DES_AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
+		q.agregarParametroValues("REF_AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
 		q.agregarParametroValues("DES_RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
 		q.agregarParametroValues("IND_ACTIVO", "1");
 		q.agregarParametroValues("ID_USUARIO_ALTA", "'" + idUsuarioAlta + "'");
@@ -114,9 +114,9 @@ public class RecibosUtil {
 				+ "'pdf' AS tipoReporte, \r\n"
 				+ "OS.ID_VELATORIO AS idVelatorio,\r\n"
 				+ "RP.CAN_TRAMITES AS canTramites,\r\n"
-				+ "RP.DESC_TRAMITES AS descTramites,\r\n"
+				+ "RP.REF_TRAMITES AS descTramites,\r\n"
 				+ "RP.CAN_DERECHOS AS canDerechos,\r\n"
-				+ "RP.DESC_DERECHOS AS descDerechos,\r\n"
+				+ "RP.REF_DERECHOS AS descDerechos,\r\n"
 				+ "RP.CAN_SUMA AS canSuma,\r\n"
 				+ "RP.CAN_TOTAL AS canTotal,\r\n"
 				+ "RP.DES_AGENTE_FUNERAL_MAT AS agenteFuneMat,\r\n"
