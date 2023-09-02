@@ -157,6 +157,10 @@ public class RecPagosServiceImpl implements RecPagosService {
 		ReporteDto reporteDto= gson.fromJson(datosJson, ReporteDto.class);
 		Map<String, Object> envioDatos = recPagos.generarReportePDF(reporteDto, nombrePdfReportes);
 		
+		if(reporteDto.getTipoReporte().equals("xls")) {
+            envioDatos.put("IS_IGNORE_PAGINATION", true);
+        }
+		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + envioDatos, authentication);
 		
@@ -171,6 +175,10 @@ public class RecPagosServiceImpl implements RecPagosService {
 		Gson gson = new Gson();
 		PlantillaRecPagosRequest plantillaRecPagosRequest = gson.fromJson(String.valueOf(request.getDatos().get(AppConstantes.DATOS)), PlantillaRecPagosRequest.class);
 		Map<String, Object> envioDatos = new RecPagos().generarPlantillaControlSalidaDonacionPDF(plantillaRecPagosRequest,nombrePdfDetalleRecPagos);
+		
+		if(plantillaRecPagosRequest.getTipoReporte().equals("xls")) {
+            envioDatos.put("IS_IGNORE_PAGINATION", true);
+        }
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + envioDatos, authentication);
