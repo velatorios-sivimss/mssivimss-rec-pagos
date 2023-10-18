@@ -1,6 +1,7 @@
 package com.imss.sivimss.recpagos.service.impl;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = recPagos.obtenerRecPagos(request).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
+		query = new String(DatatypeConverter.parseBase64Binary(query), StandardCharsets.UTF_8);
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
