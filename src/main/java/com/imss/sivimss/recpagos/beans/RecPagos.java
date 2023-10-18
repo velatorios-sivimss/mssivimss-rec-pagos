@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.DatatypeConverter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.imss.sivimss.recpagos.model.request.PlantillaRecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.RecPagosRequest;
 import com.imss.sivimss.recpagos.model.request.ReporteDto;
@@ -36,6 +39,7 @@ public class RecPagos {
 	private Integer idRol;
 	private String fechaInicio;
 	private String fechaFin;
+	private static final Logger log = LoggerFactory.getLogger(RecPagos.class);
 
 	public RecPagos(RecPagosRequest recPagosRequest) {
 		this.claveFolio = recPagosRequest.getClaveFolio();
@@ -68,6 +72,7 @@ public class RecPagos {
 				+ "AND PB.CVE_ESTATUS_PAGO = '2' "
 				+ "AND PB.ID_FLUJO_PAGOS = '1' "
 				+ "ORDER BY OS.ID_ORDEN_SERVICIO ASC ";
+		log.info(query);
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 
@@ -118,6 +123,7 @@ public class RecPagos {
 		
 		query.append(" ORDER BY OS.ID_ORDEN_SERVICIO ASC ");
 
+		log.info(query.toString());
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 		return request;
@@ -133,6 +139,7 @@ public class RecPagos {
 			condicion = condicion + " AND PB.NOM_CONTRATANTE = '"
 					+ this.nomContratante + "'";
 		}
+		log.info(condicion);
 		envioDatos.put("condicion", condicion);
 		envioDatos.put("tipoReporte", reporteDto.getTipoReporte());
 		envioDatos.put("rutaNombreReporte", nombrePdfReportes);

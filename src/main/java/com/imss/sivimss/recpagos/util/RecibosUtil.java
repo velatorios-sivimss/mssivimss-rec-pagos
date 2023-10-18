@@ -34,7 +34,7 @@ public class RecibosUtil {
 		q.agregarParametroValues("CAN_SUMA", "'" + reciboPago.getCanSuma() + "'");
 		q.agregarParametroValues("CAN_TOTAL", "'" + reciboPago.getCanTotal() + "'");
 		q.agregarParametroValues("REF_AGENTE_FUNERAL_MAT", "'" + reciboPago.getAgenteFuneMat() + "'");
-		q.agregarParametroValues("DES_RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
+		q.agregarParametroValues("REF_RECIBE_MAT", "'" + reciboPago.getRecibeMat() + "'");
 		q.agregarParametroValues("IND_ACTIVO", "1");
 		q.agregarParametroValues("ID_USUARIO_ALTA", "'" + idUsuarioAlta + "'");
 		
@@ -61,6 +61,7 @@ public class RecibosUtil {
 				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
 				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'"
 				+ "AND PD.CVE_ESTATUS = '4' ");
+		log.info( query.toString() );
 		
 		return query.toString();
 	}
@@ -78,6 +79,7 @@ public class RecibosUtil {
 				+ "IND_ACTIVO = '1' "
 				+ "AND  IND_TIPO_TRAMITE = '0' "
 				+ "AND ID_VELATORIO = '" + idVelatorio + "'");
+		log.info( query.toString() );
 		
 		return query.toString();
 	}
@@ -95,6 +97,7 @@ public class RecibosUtil {
 				+ "IND_ACTIVO = '1' "
 				+ "AND  IND_TIPO_TRAMITE = '1' "
 				+ "AND ID_VELATORIO = '" + idVelatorio + "'");
+		log.info( query.toString() );
 		
 		return query.toString();
 	}
@@ -103,37 +106,38 @@ public class RecibosUtil {
 		
 		StringBuilder query = new StringBuilder("");
 		
-		query.append( "SELECT \r\n"
-				+ "RP.NUM_FOLIO AS claveFolio, \r\n"
-				+ "DEL.DES_DELEGACION AS delegacion, \r\n"
-				+ "VEL.DES_VELATORIO AS velatorio, \r\n"
-				+ "RP.FEC_RECIBO_PAGO AS fecha, \r\n"
-				+ "RP.NOM_CONTRATANTE AS recibimos, \r\n"
-				+ "RP.CAN_RECIBO_PAGO AS cantidad, \r\n"
-				+ "'reportes/plantilla/DetalleRecPagos.jrxml' AS rutaNombreReporte, \r\n"
-				+ "'pdf' AS tipoReporte, \r\n"
-				+ "OS.ID_VELATORIO AS idVelatorio,\r\n"
-				+ "RP.CAN_TRAMITES AS canTramites,\r\n"
-				+ "RP.REF_TRAMITES AS descTramites,\r\n"
-				+ "RP.CAN_DERECHOS AS canDerechos,\r\n"
-				+ "RP.REF_DERECHOS AS descDerechos,\r\n"
-				+ "RP.CAN_SUMA AS canSuma,\r\n"
-				+ "RP.CAN_TOTAL AS canTotal,\r\n"
-				+ "RP.DES_AGENTE_FUNERAL_MAT AS agenteFuneMat,\r\n"
-				+ "RP.DES_RECIBE_MAT AS recibeMat,\r\n"
-				+ "IFNULL( CPF.DES_FOLIO, 'NA') AS folioPF,\r\n"
-				+ "CONCAT(LPAD(RP.ID_RECIBO_PAGO, 5, '0'), OS.ID_VELATORIO ) AS folio\r\n"
-				+ "FROM SVT_RECIBO_PAGO RP\r\n"
-				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_DETALLE = RP.ID_PAGO_DETALLE\r\n"
-				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA\r\n"
-				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO\r\n"
-				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = RP.ID_VELATORIO\r\n"
-				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = RP.ID_DELEGACION\r\n"
-				+ "INNER JOIN SVC_FINADO F ON F.ID_ORDEN_SERVICIO = OS.ID_ORDEN_SERVICIO\r\n"
-				+ "LEFT JOIN SVT_CONVENIO_PF CPF ON CPF.ID_CONVENIO_PF = F.ID_CONTRATO_PREVISION\r\n"
+		query.append( "SELECT  "
+				+ "RP.NUM_FOLIO AS claveFolio,  "
+				+ "DEL.DES_DELEGACION AS delegacion,  "
+				+ "VEL.DES_VELATORIO AS velatorio,  "
+				+ "RP.FEC_RECIBO_PAGO AS fecha,  "
+				+ "RP.NOM_CONTRATANTE AS recibimos,  "
+				+ "RP.CAN_RECIBO_PAGO AS cantidad,  "
+				+ "'reportes/plantilla/DetalleRecPagos.jrxml' AS rutaNombreReporte,  "
+				+ "'pdf' AS tipoReporte,  "
+				+ "OS.ID_VELATORIO AS idVelatorio, "
+				+ "RP.CAN_TRAMITES AS canTramites, "
+				+ "RP.REF_TRAMITES AS descTramites, "
+				+ "RP.CAN_DERECHOS AS canDerechos, "
+				+ "RP.REF_DERECHOS AS descDerechos, "
+				+ "RP.CAN_SUMA AS canSuma, "
+				+ "RP.CAN_TOTAL AS canTotal, "
+				+ "RP.REF_AGENTE_FUNERAL_MAT AS agenteFuneMat, "
+				+ "RP.REF_RECIBE_MAT AS recibeMat, "
+				+ "IFNULL( CPF.DES_FOLIO, 'NA') AS folioPF, "
+				+ "CONCAT(LPAD(RP.ID_RECIBO_PAGO, 5, '0'), OS.ID_VELATORIO ) AS folio "
+				+ "FROM SVT_RECIBO_PAGO RP "
+				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_DETALLE = RP.ID_PAGO_DETALLE "
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
+				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
+				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = RP.ID_VELATORIO "
+				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = RP.ID_DELEGACION "
+				+ "INNER JOIN SVC_FINADO F ON F.ID_ORDEN_SERVICIO = OS.ID_ORDEN_SERVICIO "
+				+ "LEFT JOIN SVT_CONVENIO_PF CPF ON CPF.ID_CONVENIO_PF = F.ID_CONTRATO_PREVISION "
 				+ "WHERE " );
 		query.append( "RP.ID_RECIBO_PAGO = '" + idReciboPago + "' " );
 		query.append( "LIMIT 1" );
+		log.info( query.toString() );
 		
 		return query.toString();
 	}
