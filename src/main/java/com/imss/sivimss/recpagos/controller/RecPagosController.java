@@ -57,7 +57,7 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	public CompletableFuture<Object> buscar(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
-		Response<?> response =   recPagosService.buscarFiltrosRecPagos(request,authentication);
+		Response<Object> response =   recPagosService.buscarFiltrosRecPagos(request,authentication);
 		
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
@@ -68,7 +68,7 @@ public class RecPagosController {
 	@TimeLimiter(name = "msflujo")
 	public CompletableFuture<Object>  generarDocumento(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.generarDocumento(request,authentication);
+		Response<Object> response =  recPagosService.generarDocumento(request,authentication);
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
       
 	}
@@ -79,7 +79,7 @@ public class RecPagosController {
 	@TimeLimiter(name = "msflujo")
 	public CompletableFuture<Object>  generarDocumentoDetalle(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.generarDocumentoDetalleRecPagos(request,authentication);
+		Response<Object> response =  recPagosService.generarDocumentoDetalleRecPagos(request,authentication);
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
       
 	}
@@ -89,7 +89,7 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	public CompletableFuture<Object> buscarDatosReporteRecPagos(@RequestBody DatosRequest request, Authentication authentication) throws IOException {
-		Response<?> response =   recPagosService.buscarDatosReporteRecPagos(request,authentication);
+		Response<Object> response =   recPagosService.buscarDatosReporteRecPagos(request,authentication);
 		
 		return CompletableFuture.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
 	}
@@ -108,7 +108,7 @@ public class RecPagosController {
 
 	public CompletableFuture<Object> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
 			RuntimeException e) throws IOException {
-		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		Response<Object> response = providerRestTemplate.respuestaProvider(e.getMessage());
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(),this.getClass().getSimpleName(),this.getClass().getPackage().toString(),e.getMessage(),CONSULTA+" "+ request,authentication);
 		
@@ -118,7 +118,7 @@ public class RecPagosController {
 
 	public CompletableFuture<Object> fallbackGenerico(@RequestBody DatosRequest request, Authentication authentication,
 			NumberFormatException e) throws IOException {
-		Response<?> response = providerRestTemplate.respuestaProvider(e.getMessage());
+		Response<Object> response = providerRestTemplate.respuestaProvider(e.getMessage());
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(),this.getClass().getSimpleName(),this.getClass().getPackage().toString(),e.getMessage(),CONSULTA+" "+ request,authentication);
 		
@@ -130,9 +130,9 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/agregar")
-	public CompletableFuture<?> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> agregar(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.agregarRecibo(request,authentication);
+		Response<Object> response =  recPagosService.agregarRecibo(request,authentication);
 
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -143,9 +143,9 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/consulta/foliosOds")
-	public CompletableFuture<?> foliosOds(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> foliosOds(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.foliosOds(request,authentication);
+		Response<Object> response =  recPagosService.foliosOds(request,authentication);
 
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -156,9 +156,9 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/consulta/tramites")
-	public CompletableFuture<?> tramites(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> tramites(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.tramites(request,authentication);
+		Response<Object> response =  recPagosService.tramites(request,authentication);
 
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -169,9 +169,9 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/consulta/derechos")
-	public CompletableFuture<?> derechos(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> derechos(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.derechos(request,authentication);
+		Response<Object> response =  recPagosService.derechos(request,authentication);
 
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));
@@ -182,9 +182,9 @@ public class RecPagosController {
 	@Retry(name = "msflujo", fallbackMethod = "fallbackGenerico")
 	@TimeLimiter(name = "msflujo")
 	@PostMapping("/consulta/reciboPago")
-	public CompletableFuture<?> reciboPago(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
+	public CompletableFuture<Object> reciboPago(@RequestBody DatosRequest request,Authentication authentication) throws IOException {
 	
-		Response<?> response =  recPagosService.reciboPago(request,authentication);
+		Response<Object> response =  recPagosService.reciboPago(request,authentication);
 
 		return CompletableFuture
 				.supplyAsync(() -> new ResponseEntity<>(response, HttpStatus.valueOf(response.getCodigo())));

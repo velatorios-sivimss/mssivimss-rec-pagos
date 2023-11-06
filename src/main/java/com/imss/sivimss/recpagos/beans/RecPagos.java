@@ -122,8 +122,8 @@ public class RecPagos {
 		}
 		
 		query.append(" ORDER BY OS.ID_ORDEN_SERVICIO ASC ");
-
-		log.info(query.toString());
+		String str = query.toString();
+		log.info(str);
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());
 		request.getDatos().put(AppConstantes.QUERY, encoded);
 		return request;

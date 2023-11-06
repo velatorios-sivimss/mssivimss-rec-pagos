@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -75,7 +77,9 @@ public class RecPagosServiceImpl implements RecPagosService {
 	
 	private static final String CREAR = "/crear";
 	
-	private static final String CONSULTA_GENERICA = "/consulta";
+	private static final String CONSULTA_GENERICA = "/consulta"; 
+
+	private static final Logger log = LoggerFactory.getLogger(RecPagosServiceImpl.class);
 	
 	@Override
 	public Response<Object> consultarRecPagos(DatosRequest request, Authentication authentication) throws IOException {
@@ -104,7 +108,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 
 		Map<String, Object> dato = recPagos.buscarFiltrosRecPagos(request,recPagosRequest).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
+		query = new String(DatatypeConverter.parseBase64Binary(query), StandardCharsets.UTF_8);
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -128,7 +132,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = datos.getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
+		query = new String(DatatypeConverter.parseBase64Binary(query), StandardCharsets.UTF_8);
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -137,7 +141,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 				authentication);
 		
 		Integer id = (Integer) respuesta.getDatos();
-		String folio = String.format("%05d",id);;
+		String folio = String.format("%05d",id);
 		folio = folio + reciboPago.getIdVelatorio();
 		dato = new HashMap<>();
 		dato.put("folio", folio);
@@ -200,7 +204,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		
 		Map<String, Object> dato = consultarRecPagos.buscarDatosReporteRecPagos(request,consultarRecPagos).getDatos();
 		String query = (String) dato.get(AppConstantes.QUERY);
-		query = new String(DatatypeConverter.parseBase64Binary(query), "UTF-8");
+		query = new String(DatatypeConverter.parseBase64Binary(query), StandardCharsets.UTF_8);
 		
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
@@ -215,7 +219,12 @@ public class RecPagosServiceImpl implements RecPagosService {
 			Double cantidadD = (Double) dato.get("cantidad");
 			
 			Integer cantidadI = cantidadD.intValue();
-			String cantidadLetra = ConvertirImporteLetra.importeEnTexto(cantidadI);
+			String cantidadLetra = "";
+			try {
+				cantidadLetra = ConvertirImporteLetra.importeEnTexto(cantidadI);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
 			dato.put("cantidadLetra", cantidadLetra);
 			listadatos = new ArrayList<>();
 			listadatos.add(dato);
@@ -239,7 +248,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 
-		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes(StandardCharsets.UTF_8)));
 		
 		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
 				authentication);
@@ -259,7 +268,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 
-		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes(StandardCharsets.UTF_8)));
 		
 		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
 				authentication);
@@ -279,7 +288,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 
-		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes(StandardCharsets.UTF_8)));
 		
 		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
 				authentication);
@@ -300,7 +309,7 @@ public class RecPagosServiceImpl implements RecPagosService {
 		logUtil.crearArchivoLog(Level.INFO.toString(), this.getClass().getSimpleName(), 
 				this.getClass().getPackage().toString(), "",CONSULTA +" " + query, authentication);
 
-		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes("UTF-8")));
+		request.getDatos().put(AppConstantes.QUERY, DatatypeConverter.printBase64Binary(query.getBytes(StandardCharsets.UTF_8)));
 		
 		Response<Object> response = providerRestTemplate.consumirServicio(request.getDatos(), urlDomino + CONSULTA_GENERICA, 
 				authentication);
