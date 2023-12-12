@@ -49,27 +49,27 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 	public DatosRequest buscarDatosReporteRecPagos(DatosRequest request,ConsultarRecPagos consultarRecPagos) {
 		
 		StringBuilder query = new StringBuilder("SELECT  "
+				+ "PB.ID_PAGO_BITACORA AS idPagoBitacora, "
 				+ "OS.CVE_FOLIO AS claveFolio,  "
 				+ "DEL.DES_DELEGACION AS delegacion,  "
 				+ "VEL.DES_VELATORIO AS velatorio,  "
 				+ "OS.FEC_ALTA AS fecha,  "
 				+ "PB.NOM_CONTRATANTE AS recibimos,  "
-				+ "PD.IMP_PAGO AS cantidad,  "
+				+ "PB.IMP_VALOR AS cantidad,  "
 				+ "'reportes/plantilla/DetalleRecPagos.jrxml' AS rutaNombreReporte,  "
 				+ "'pdf' AS tipoReporte,  "
 				+ "OS.ID_VELATORIO AS idVelatorio,  "
 				+ "DEL.ID_DELEGACION AS idDelegacion, "
 				+ "IFNULL( CPF.DES_FOLIO, 'NA') AS folioPF, "
-				+ "PD.ID_PAGO_DETALLE AS idPagoDetalle "
-				+ "FROM SVT_PAGO_DETALLE PD "
-				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
+				//+ "PD.ID_PAGO_DETALLE AS idPagoDetalle "
+				+ "FROM SVT_PAGO_BITACORA PB "
 				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
 				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO "
 				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = VEL.ID_DELEGACION "
 				+ "INNER JOIN SVC_FINADO F ON F.ID_ORDEN_SERVICIO = OS.ID_ORDEN_SERVICIO "
 				+ "LEFT JOIN SVT_CONVENIO_PF CPF ON CPF.ID_CONVENIO_PF = F.ID_CONTRATO_PREVISION ");
 		if (consultarRecPagos.getIdPagoBitacora() != null) {
-			query.append(" WHERE PD.ID_PAGO_DETALLE = '" + consultarRecPagos.getIdPagoBitacora() + "' ");
+			query.append(" WHERE PB.ID_PAGO_BITACORA = '" + consultarRecPagos.getIdPagoBitacora() + "' ");
 		}
 		query.append(" LIMIT 1 ");
 		String str = query.toString(); 

@@ -51,19 +51,18 @@ public class RecibosUtil {
 	public String consultaFolios(String idVelatorio) {
 		StringBuilder query = new StringBuilder("");
 		
-		query.append( "SELECT "
-				+ "DISTINCT(OS.ID_ORDEN_SERVICIO) AS idOds, "
-				+ "OS.CVE_FOLIO AS folioOds "
-				+ "FROM SVC_ORDEN_SERVICIO OS "
-				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_REGISTRO = OS.ID_ORDEN_SERVICIO "
-				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_BITACORA = PB.ID_PAGO_BITACORA "
-				+ "WHERE "
-				+ "PB.ID_FLUJO_PAGOS = '1' "
-				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'"
-				+ "AND PD.CVE_ESTATUS = '4' ");
-		String str = query.toString(); 
-		log.info(str);
+  
+		query.append( "SELECT \r\n"
+				+ "DISTINCT(OS.ID_ORDEN_SERVICIO) AS idOds, \r\n"
+				+ "OS.CVE_FOLIO AS folioOds \r\n"
+				+ "FROM SVC_ORDEN_SERVICIO OS \r\n"
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_REGISTRO = OS.ID_ORDEN_SERVICIO \r\n"
+				+ "WHERE \r\n"
+				+ "PB.ID_FLUJO_PAGOS = '1' \r\n"
+				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' \r\n"
+				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'");
+		log.info( query.toString() );
+
 		
 		return query.toString();
 	}
@@ -130,8 +129,7 @@ public class RecibosUtil {
 				+ "IFNULL( CPF.DES_FOLIO, 'NA') AS folioPF, "
 				+ "CONCAT(LPAD(RP.ID_RECIBO_PAGO, 5, '0'), OS.ID_VELATORIO ) AS folio "
 				+ "FROM SVT_RECIBO_PAGO RP "
-				+ "INNER JOIN SVT_PAGO_DETALLE PD ON PD.ID_PAGO_DETALLE = RP.ID_PAGO_DETALLE "
-				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
+				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = RP.ID_PAGO_DETALLE "
 				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
 				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = RP.ID_VELATORIO "
 				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = RP.ID_DELEGACION "
