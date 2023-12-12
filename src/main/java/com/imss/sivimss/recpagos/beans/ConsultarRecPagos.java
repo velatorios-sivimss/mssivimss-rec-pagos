@@ -72,7 +72,8 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 			query.append(" WHERE PB.ID_PAGO_BITACORA = '" + consultarRecPagos.getIdPagoBitacora() + "' ");
 		}
 		query.append(" LIMIT 1 ");
-		log.info(query.toString());
+		String str = query.toString(); 
+		log.info(str);
 		
 
 		String encoded = DatatypeConverter.printBase64Binary(query.toString().getBytes());

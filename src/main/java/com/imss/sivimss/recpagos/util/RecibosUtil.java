@@ -39,7 +39,8 @@ public class RecibosUtil {
 		q.agregarParametroValues("ID_USUARIO_ALTA", "'" + idUsuarioAlta + "'");
 		
 		String query = q.obtenerQueryInsertar();
-		log.info( query );
+		String str = query.toString(); 
+		log.info(str);
 		String encoded = DatatypeConverter.printBase64Binary(query.getBytes());
 		parametro.put(AppConstantes.QUERY, encoded);
 		request.setDatos(parametro);
@@ -50,6 +51,7 @@ public class RecibosUtil {
 	public String consultaFolios(String idVelatorio) {
 		StringBuilder query = new StringBuilder("");
 		
+  
 		query.append( "SELECT \r\n"
 				+ "DISTINCT(OS.ID_ORDEN_SERVICIO) AS idOds, \r\n"
 				+ "OS.CVE_FOLIO AS folioOds \r\n"
@@ -60,6 +62,7 @@ public class RecibosUtil {
 				+ "AND OS.ID_ESTATUS_ORDEN_SERVICIO = '2' \r\n"
 				+ "AND OS.ID_VELATORIO = '" + idVelatorio + "'");
 		log.info( query.toString() );
+
 		
 		return query.toString();
 	}
@@ -95,7 +98,8 @@ public class RecibosUtil {
 				+ "IND_ACTIVO = '1' "
 				+ "AND  IND_TIPO_TRAMITE = '1' "
 				+ "AND ID_VELATORIO = '" + idVelatorio + "'");
-		log.info( query.toString() );
+		String str = query.toString(); 
+		log.info(str);
 		
 		return query.toString();
 	}
@@ -134,7 +138,8 @@ public class RecibosUtil {
 				+ "WHERE " );
 		query.append( "RP.ID_RECIBO_PAGO = '" + idReciboPago + "' " );
 		query.append( "LIMIT 1" );
-		log.info( query.toString() );
+		String str = query.toString(); 
+		log.info(str);
 		
 		return query.toString();
 	}

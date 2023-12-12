@@ -14,60 +14,61 @@ import java.util.Date;
 
 @Component
 public class LogUtil {
-    @Value("${ruta-log}")
-    private String rutaLog;
+	 @Value("${ruta-log}")
+	    private String rutaLog;
+	    
+	    @Value("$(spring.application.name)")
+	    private String nombreApp;
 
-    @Value("${spring.application.name}")
-    private String nombre;
-    
-    private String formatoFechaLog = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
+	    private String formatoFechaLog = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogUtil.class);
+	    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogUtil.class);
 
-    private static String RETORNO = "\r\n";
-    
-    public void crearArchivoLog(String tipoLog, String origen, String clasePath, String mensaje, String tiempoEjecucion, Authentication authentication) throws IOException {
-        
-    	Gson json = new Gson();
-        UsuarioDto usuarioDto = json.fromJson((String) authentication.getPrincipal(), UsuarioDto.class);
-        File archivo = new File(rutaLog + nombre + new SimpleDateFormat("ddMMyyyy").format(new Date()) + ".log");
-        FileWriter escribirArchivo = new FileWriter(archivo, true);
-        try {
-        	
-        	String peticion = "" + formatoFechaLog + " --- [" + tipoLog + "] " + origen + " " + clasePath + " : " + mensaje + " , Usuario: " + usuarioDto.getCveUsuario() + " - " + tiempoEjecucion;
-        	log.info(peticion);
-            escribirArchivo.write(peticion);
-            escribirArchivo.write(RETORNO);
-            escribirArchivo.close();
-            
-        } catch (Exception e) {
-            log.error("No se puede escribir el log.");
-            log.error(e.getMessage());
-        } finally {
-            escribirArchivo.close();
-        }
+	    private static final String GUION_CORCHETE =  "--- [ "; 
+	    private static final String USUARIO = " , Usuario: ";
 
-    }
+	    public void crearArchivoLog(String tipoLog, String origen, String clasePath, String mensaje, String tiempoEjecucion, Authentication authentication) throws IOException {
 
-    public void crearArchivoLogDTO(String tipoLog, String origen, String clasePath, String mensaje, String tiempoEjecucion, UsuarioDto usuarioDto) throws IOException {
-        
-    	File archivo = new File(rutaLog + nombre + new SimpleDateFormat("ddMMyyyy").format(new Date()) + ".log");
-        FileWriter escribirArchivo = new FileWriter(archivo, true);
-        try {
-        	
-        	String peticion = "" + formatoFechaLog + " --- [" + tipoLog + "] " + origen + " " + clasePath + " : " + mensaje + " , Usuario: " + usuarioDto.getCveUsuario() + " - " + tiempoEjecucion;
-        	log.info(peticion);
-            escribirArchivo.write(peticion);
-            escribirArchivo.write(RETORNO);
-            escribirArchivo.close();
-            
-        } catch (Exception e) {
-            log.error("No se puede escribir el log.");
-            log.error(e.getMessage());
-        } finally {
-            escribirArchivo.close();
-        }
+	        File archivo = new File(rutaLog + nombreApp + "_" + new SimpleDateFormat("ddMMyyyy").format(new Date()) + ".log");
+	        try (FileWriter escribirArchivo = new FileWriter(archivo, true)){
+	            Gson json = new Gson();
+	            UsuarioDto usuarioDto = json.fromJson((String) authentication.getPrincipal(), UsuarioDto.class);
+	            String contenido = "" + formatoFechaLog + GUION_CORCHETE + tipoLog + "] " + origen + " " + clasePath + " : " + mensaje + USUARIO + usuarioDto.getCveUsuario() + " - " + tiempoEjecucion;
+	            log.info(contenido);
+	            if (archivo.exists()) {
+	                escribirArchivo.write(contenido);
+	                escribirArchivo.write("\r\n");
+	            } else {
+	                if(!archivo.createNewFile())
+	                    log.error("No se puede crear Archivo de log.");
+	                escribirArchivo.write(contenido);
+	                escribirArchivo.write("\r\n");
+	            }
+	        } catch (Exception e) {
+	            log.error("No se puede escribir el log.");
+	            log.error(e.getMessage());
+	        }
 
-    }
+	    }
+
+	    public void crearArchivoLogDTO(String tipoLog, String origen, String clasePath, String mensaje, String tiempoEjecucion, UsuarioDto usuarioDto) throws IOException {
+	    	
+	            File archivo = new File(rutaLog + new SimpleDateFormat("ddMMyyyy").format(new Date()) + ".log");
+	            
+	        	try (FileWriter escribirArchivo = new FileWriter(archivo, true)) {
+	            if (archivo.exists()) {
+	                escribirArchivo.write("" + formatoFechaLog + GUION_CORCHETE + tipoLog + "] " + origen + " " + clasePath + " : " + mensaje + USUARIO + usuarioDto.getCveUsuario() + " - " + tiempoEjecucion);
+	                escribirArchivo.write("\r\n");
+	            } else {
+	                if(!archivo.createNewFile())
+	                    log.error("No se puede crear Archivo de log.");
+	                escribirArchivo.write("" + formatoFechaLog + GUION_CORCHETE + tipoLog + "] " + origen + " " + clasePath + " : " + mensaje + USUARIO + usuarioDto.getCveUsuario() + " - " + tiempoEjecucion);
+	                escribirArchivo.write("\r\n");
+	            }
+	        } catch (Exception e) {
+	            log.error("No se puede escribir el log.");
+	            log.error(e.getMessage());
+	        }
+	    }
 
 }
