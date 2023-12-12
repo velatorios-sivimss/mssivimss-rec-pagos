@@ -55,21 +55,25 @@ public class RecPagos {
 	}
 
 	public DatosRequest obtenerRecPagos(DatosRequest request) {
-		String query = "SELECT "
-				+ "PD.ID_PAGO_DETALLE AS idPagoBitacora, "
-				+ "OS.FEC_ALTA AS fOds, "
-				+ "OS.CVE_FOLIO AS claveFolio, "
-				+ "PB.NOM_CONTRATANTE AS nomContratante, "
-				+ "EOS.DES_ESTATUS AS claveEstatusPago, "
-				+ "RP.ID_RECIBO_PAGO AS idReciboPago "
-				+ "FROM SVT_PAGO_DETALLE PD "
-				+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
-				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
-				+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO "
-				+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
-				+ "WHERE "
-				+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-				+ "AND PB.CVE_ESTATUS_PAGO = '2' "
+		String query = "SELECT \r\n"
+				//+ "PD.ID_PAGO_DETALLE AS idPagoDetalle,\r\n"
+				+ "PB.ID_PAGO_BITACORA AS idPagoBitacora, \r\n"
+				+ "OS.FEC_ALTA AS fOds, \r\n"
+				+ "OS.CVE_FOLIO AS claveFolio, \r\n"
+				+ "PB.NOM_CONTRATANTE AS nomContratante, \r\n"
+				+ "EP.DES_ESTATUS AS claveEstatusPago, \r\n"
+				+ "RP.ID_RECIBO_PAGO AS idReciboPago \r\n"
+				+ "FROM SVT_PAGO_BITACORA PB\r\n"
+				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO \r\n"
+				+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO \r\n"
+				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO \r\n"
+				+ "INNER JOIN SVC_ESTATUS_PAGO EP ON EP.ID_ESTATUS_PAGO = PB.CVE_ESTATUS_PAGO \r\n"
+				//+ "LEFT JOIN SVT_PAGO_DETALLE PD ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA \r\n"
+				//+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE\r\n"
+				+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PB.ID_PAGO_BITACORA\r\n" /** TODO -  Validando si funciona**/
+				+ "WHERE \r\n"
+				+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' \r\n"
+				+ "AND PB.CVE_ESTATUS_PAGO IN (2, 4, 8) \r\n"
 				+ "AND PB.ID_FLUJO_PAGOS = '1' "
 				+ "ORDER BY OS.ID_ORDEN_SERVICIO ASC ";
 		log.info(query);
@@ -82,23 +86,26 @@ public class RecPagos {
 	public DatosRequest buscarFiltrosRecPagos(DatosRequest request, RecPagosRequest recPagos) {
 
 		StringBuilder query = new StringBuilder(
-				"SELECT "
-						+ "PD.ID_PAGO_DETALLE AS idPagoBitacora, "
-						+ "OS.FEC_ALTA AS fOds, "
-						+ "OS.CVE_FOLIO AS claveFolio, "
-						+ "PB.NOM_CONTRATANTE AS nomContratante, "
-						+ "EOS.DES_ESTATUS AS claveEstatusPago, "
-						+ "RP.ID_RECIBO_PAGO AS idReciboPago "
-						+ "FROM SVT_PAGO_DETALLE PD "
-						+ "INNER JOIN SVT_PAGO_BITACORA PB ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA "
-						+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO "
-						+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO "
-						+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO "
-						+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE "
-						+ "WHERE "
-						+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' "
-						+ "AND PB.CVE_ESTATUS_PAGO IN (2, 4, 8) "
-						+ "AND PB.ID_FLUJO_PAGOS = '1' ");
+				"SELECT \r\n"
+				//+ "PD.ID_PAGO_DETALLE AS idPagoDetalle,\r\n"
+				+ "PB.ID_PAGO_BITACORA AS idPagoBitacora, \r\n"
+				+ "OS.FEC_ALTA AS fOds, \r\n"
+				+ "OS.CVE_FOLIO AS claveFolio, \r\n"
+				+ "PB.NOM_CONTRATANTE AS nomContratante, \r\n"
+				+ "EP.DES_ESTATUS AS claveEstatusPago, \r\n"
+				+ "RP.ID_RECIBO_PAGO AS idReciboPago \r\n"
+				+ "FROM SVT_PAGO_BITACORA PB\r\n"
+				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO \r\n"
+				+ "INNER JOIN SVC_ESTATUS_ORDEN_SERVICIO EOS ON EOS.ID_ESTATUS_ORDEN_SERVICIO = OS.ID_ESTATUS_ORDEN_SERVICIO \r\n"
+				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO \r\n"
+				+ "INNER JOIN SVC_ESTATUS_PAGO EP ON EP.ID_ESTATUS_PAGO = PB.CVE_ESTATUS_PAGO \r\n"
+				//+ "LEFT JOIN SVT_PAGO_DETALLE PD ON PB.ID_PAGO_BITACORA = PD.ID_PAGO_BITACORA \r\n"
+				//+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PD.ID_PAGO_DETALLE\r\n"
+				+ "LEFT JOIN SVT_RECIBO_PAGO RP ON RP.ID_PAGO_DETALLE = PB.ID_PAGO_BITACORA\r\n" /** TODO -  Validando si funciona**/
+				+ "WHERE \r\n"
+				+ "OS.ID_ESTATUS_ORDEN_SERVICIO = '2' \r\n"
+				+ "AND PB.CVE_ESTATUS_PAGO IN (2, 4, 8) \r\n"
+				+ "AND PB.ID_FLUJO_PAGOS = '1' \r\n");
 		
 		if (recPagos.getClaveFolio() != null) {
 			query.append( "AND OS.CVE_FOLIO LIKE CONCAT('" + recPagos.getClaveFolio() + "', '%') " );
