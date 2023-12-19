@@ -218,10 +218,10 @@ public class RecPagosServiceImpl implements RecPagosService {
 			dato = listadatos.get(0);
 			Double cantidadD = (Double) dato.get("cantidad");
 			
-			Integer cantidadI = cantidadD.intValue();
+			//Integer cantidadI = cantidadD.intValue();
 			String cantidadLetra = "";
 			try {
-				cantidadLetra = ConvertirImporteLetra.importeEnTexto(cantidadI);
+				cantidadLetra = ConvertirImporteLetra.importeEnTexto(cantidadD);
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}
