@@ -52,7 +52,8 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 				+ "PB.ID_PAGO_BITACORA AS idPagoBitacora, \r\n"
 				+ "OS.CVE_FOLIO AS claveFolio, \r\n"
 				+ "DEL.DES_DELEGACION AS delegacion, \r\n"
-				+ "VEL.DES_VELATORIO AS velatorio, \r\n"
+				+ "VEL.DES_VELATORIO AS velatorio,\r\n"
+				+ "CONCAT(DOM.REF_ESTADO, ', ', DOM.REF_MUNICIPIO) AS lugar, \r\n"
 				+ "OS.FEC_ALTA AS fecha, \r\n"
 				+ "PB.NOM_CONTRATANTE AS recibimos, \r\n"
 				+ "PB.IMP_VALOR AS cantidad, \r\n"
@@ -65,6 +66,7 @@ public class ConsultarRecPagos extends ConsultaRecPagosRequest{
 				+ "INNER JOIN SVC_ORDEN_SERVICIO OS ON OS.ID_ORDEN_SERVICIO = PB.ID_REGISTRO \r\n"
 				+ "INNER JOIN SVC_VELATORIO VEL ON VEL.ID_VELATORIO = OS.ID_VELATORIO \r\n"
 				+ "INNER JOIN SVC_DELEGACION DEL ON DEL.ID_DELEGACION = VEL.ID_DELEGACION \r\n"
+				+ "INNER JOIN SVT_DOMICILIO DOM ON DOM.ID_DOMICILIO = VEL.ID_DOMICILIO\r\n"
 				+ "INNER JOIN SVC_FINADO F ON F.ID_ORDEN_SERVICIO = OS.ID_ORDEN_SERVICIO \r\n"
 				+ "LEFT JOIN SVT_CONVENIO_PF CPF ON CPF.ID_CONVENIO_PF = F.ID_CONTRATO_PREVISION \r\n");
 		if (consultarRecPagos.getIdPagoBitacora() != null) {
